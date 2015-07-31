@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Busca de ramais</title>
+    <link rel="stylesheet" href="js/vendors/bootstrap/dist/css/bootstrap.min.css">
+    <style type="text/css">
+    #search {
+        margin-bottom: 20px;
+    }
+    .card {
+        height: 220px;
+    }
+    .panel-body {
+        font-weight: bold;
+    }
+    .panel-body span {
+        font-weight: normal;
+    }
+    </style>
+</head>
+<body ng-app="bina">
+    <div class="container">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h1>Busca de ramais</h1>
+                    <p>Caso haja erro no cadastro, favor informar ao NTI (ramal 4159).</p>
+                </div>
+                <div class="panel-body" ng-controller='buscaController'>
+                    <label for='search'>Nome:</label>
+                    <input ng-model="search" id='search' placeholder="fulano da silva">
+                    <div ng-if="search.length > 2">
+                        <div class="col-lg-4" ng-repeat="contato in contatos | filter:search | orderBy:'displayname'">
+                            <div class="card panel panel-warning" id='mat_{{contato.employeeid}}'>
+                                <div class="panel-heading">
+                                    <h4><span class="glyphicon glyphicon-user"></span> {{contato.displayname}}</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <span class="glyphicon glyphicon-envelope"> Mail:</span> <a class="text-warning" href="mailto:{{contato.mail}}">{{contato.mail}}</a><br>
+                                    <span class="glyphicon glyphicon-link"> Vínculo:</span> {{contato.title}}<br>
+                                    <span class="glyphicon glyphicon-earphone"> Ramal:</span> {{contato.ipphone}}<br>
+                                    <span class="glyphicon glyphicon-briefcase"> Lotação:</span> {{contato.department}} - {{contato.physicaldeliveryofficename}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <p><a href="mailto:nti@jfal.jus.br"><span class="glyphicon glyphicon-globe"></span> Desenvolvido pelo NTI/JFAL</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="js/vendors/angular/angular.min.js"></script>
+<script src="js/vendors/jquery/dist/jquery.min.js"></script>
+<script src="js/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="js/jfal.js"></script>
+<!-- <script src="vendors/angular-locale-pt-br/angular-locale_pt-br.js"></script> -->
+</body>
+</html>

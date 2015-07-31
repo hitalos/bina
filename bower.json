@@ -1,0 +1,19 @@
+{
+  "name": "bina",
+  "version": "1.0",
+  "authors": [
+    "Hítalo Silva <hitalos@jfal.jus.br>"
+  ],
+  "description": "Busca de ramais",
+  "main": "views/busca.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "js/vendors"
+  ],
+  "dependencies": {
+    "angular": "~1.2",
+    "bootstrap": "~3.3.5",
+    "jquery": "~2.1.4"
+  }
+}
