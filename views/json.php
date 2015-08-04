@@ -7,9 +7,11 @@ foreach($result as $key => $person){
     $contato = array();
     if(is_numeric($key)){
         foreach($ldap->attrs as $attr){
-            $contato[strtolower($attr)] = utf8_encode($person[strtolower($attr)][0]);
+            if(trim($person[strtolower($attr)][0]) != ''){
+                $contato[strtolower($attr)] = utf8_encode(trim($person[strtolower($attr)][0]));
+            }
         }
-    $list[] = $contato;
+        $list[] = $contato;
     }
 }
 
