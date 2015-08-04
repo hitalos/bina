@@ -1,15 +1,19 @@
 <?php
 require_once('classes/ldapJFAL.class.php');
 
-switch($_SERVER['REQUEST_URI']){
-	case '/':
+$path = explode('/', $_SERVER['REQUEST_URI']);
+switch($path[1]){
+	case '':
 		require_once('views/busca.html');
 		break;
-	case '/index.json':
+	case 'vcard':
+		require_once('views/vcard.php');
+		break;
+	case 'index.json':
 		require_once('views/json.php');
 		break;
-	case '/phonebook.xml':
-	case '/gs_phonebook.xml':
+	case 'phonebook.xml':
+	case 'gs_phonebook.xml':
 		require_once('views/grandstream.php');
 		break;
 	default:

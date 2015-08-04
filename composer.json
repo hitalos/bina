@@ -1,0 +1,13 @@
+{
+    "name": "hitalos/bina",
+    "description": "Busca de ramais no Active Directory da JFAL",
+    "require": {
+        "jeroendesloovere/vcard": "^1.2"
+    },
+    "authors": [
+        {
+            "name": "Hítalo Silva",
+            "email": "hitalos@jfal.jus.br"
+        }
+    ]
+}

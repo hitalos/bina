@@ -4,7 +4,7 @@ class ldapJFAL {
     const base = 'ou=JFAL - Usuarios,dc=jfal,dc=jus,dc=br';
     const user = 'bina@jfal.jus.br';
     const pass = 'bina@p0rt4r14';
-    const filter = '(&(objectClass=user)(objectCategory=person)(ipPhone=*))';
+    public $filter = '(&(objectClass=user)(objectCategory=person)(ipPhone=*))';
     public $attrs = [
         'DisplayName',
         'sAMAccountName',
@@ -28,7 +28,7 @@ class ldapJFAL {
     }
 
     public function search(){
-        $resource = ldap_search($this->conn, self::base, self::filter, $this->attrs);
+        $resource = ldap_search($this->conn, self::base, $this->filter, $this->attrs);
         ldap_sort($this->conn, $resource, 'DisplayName');
         return ldap_get_entries($this->conn, $resource);
     }
