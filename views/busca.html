@@ -2,55 +2,59 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="128x128" href="favicon.png">
+	<link rel="apple-touch-icon-precomposed" href="favicon.png">
+    <meta name="theme-color" content="#fcf8e3">
     <title>Busca de ramais</title>
     <link rel="stylesheet" href="js/vendors/bootstrap/dist/css/bootstrap.min.css">
-    <style type="text/css">
-    #search {
-        margin-bottom: 20px;
-    }
-    .card {
-        height: 220px;
-    }
-    .panel-body {
-        font-weight: bold;
-    }
-    .panel-body span {
-        font-weight: normal;
-    }
-    </style>
+    <link rel="stylesheet" href="css/jfal.css">
 </head>
 <body ng-app="bina">
-    <div class="container">
-            <div class="panel panel-warning">
-                <div class="panel-heading">
-                    <h1>Busca de ramais</h1>
-                    <p>Caso haja erro no cadastro, favor informar ao NTI (ramal 4159).</p>
-                </div>
-                <div class="panel-body" ng-controller='buscaController'>
-                    <label for='search'>Nome:</label>
-                    <input ng-model="search" id='search' placeholder="fulano da silva">
-                    <div ng-if="search.length > 2">
-                        <div class="col-lg-4" ng-repeat="contato in contatos | filter:search | orderBy:'displayname'">
-                            <div class="card panel panel-warning" id='mat_{{contato.employeeid}}'>
-                                <div class="panel-heading">
-                                    <h4><span class="glyphicon glyphicon-user"></span> {{contato.displayname}}</h4>
-                                </div>
-                                <div class="panel-body">
-                                    <span class="glyphicon glyphicon-envelope"> Mail:</span> <a class="text-warning" href="mailto:{{contato.mail}}">{{contato.mail}}</a><br>
-                                    <span class="glyphicon glyphicon-link"> Vínculo:</span> {{contato.title}}<br>
-                                    <span class="glyphicon glyphicon-earphone"> Ramal:</span> {{contato.ipphone}}<br>
-                                    <span class="glyphicon glyphicon-briefcase"> Lotação:</span> {{contato.department}} - {{contato.physicaldeliveryofficename}}
-                                </div>
+    <div class="container-fluid" ng-controller='buscaController'>
+        <header class="row text-warning">
+            <h1>Busca de ramais</h1>
+            <p>Caso haja erro no cadastro, favor informar ao NTI (ramal 4159).</p>
+            <label for='search'>Nome:</label>
+            <input ng-model="search" id='search' placeholder="fulano da silva" tabindex="1">
+            <div class="badge">{{(contatos | filter:search).length}}</div>
+        </header>
+        <content class="row">
+            <div ng-if="search.length > 2">
+                <div class="col-md-4 col-sm-6" ng-repeat="contato in contatos | filter:search | orderBy:'displayname'">
+                    <div class="card panel panel-warning" id='mat_{{contato.employeeid}}'>
+                        <div class="panel-heading" style="background-image: url(http://www.jfal.jus.br/images/fotos3x4/{{contato.samaccountname}}.jpg)">
+                            <h4><span class="glyphicon glyphicon-user"></span> {{contato.displayname}}</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="ramal" ng-if="contato.ipphone">
+                                <span class="glyphicon glyphicon-earphone"></span> Ramal: <a href="tel:{{contato.ipphone}}">{{contato.ipphone}}</a>
+                            </div>
+                            <div ng-if="contato.facsimiletelephonenumber">
+                                <span class="glyphicon glyphicon-print"> Fax:</span> {{contato.facsimiletelephonenumber}}
+                            </div>
+                            <div ng-if="contato.mobile">
+                                <span class="glyphicon glyphicon-phone"> Móvel:</span> <a href="tel:0{{contato.mobile}}">{{contato.mobile}}</a>
+                            </div>
+                            <div ng-if="contato.mail">
+                                <span class="glyphicon glyphicon-envelope"> Mail:</span> <a class="text-warning" href="mailto:{{contato.mail}}">{{contato.mail}}</a>
+                            </div>
+                            <div ng-if="contato.title">
+                                <span class="glyphicon glyphicon-link"> Vínculo:</span> {{contato.title}}
+                            </div>
+                            <div>
+                                <span class="glyphicon glyphicon-briefcase"> Lotação:</span> {{contato.department}} - {{contato.physicaldeliveryofficename}}
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="panel-footer">
-                    <p><a href="mailto:nti@jfal.jus.br"><span class="glyphicon glyphicon-globe"></span> Desenvolvido pelo NTI/JFAL</a></p>
-                </div>
             </div>
-        </div>
+        </content>
+        <footer class="row">
+            <p><a href="mailto:nti@jfal.jus.br"><span class="glyphicon glyphicon-globe"></span> Desenvolvido pelo NTI/JFAL</a></p>
+        </footer>
     </div>
 <script src="js/vendors/angular/angular.min.js"></script>
 <script src="js/vendors/jquery/dist/jquery.min.js"></script>
