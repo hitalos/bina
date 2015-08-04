@@ -5,7 +5,19 @@ class ldapJFAL {
     const user = 'bina@jfal.jus.br';
     const pass = 'bina@p0rt4r14';
     const filter = '(&(objectClass=user)(objectCategory=person)(ipPhone=*))';
-    public $attrs = array('DisplayName', 'ipPhone', 'mail', 'Department', 'PhysicalDeliveryOfficeName', 'title', 'employeeID');
+    public $attrs = [
+        'DisplayName',
+        'sAMAccountName',
+        'ipPhone',
+        'mobile',
+        'homePhone',
+        'facsimileTelephoneNumber',
+        'mail',
+        'Department',
+        'PhysicalDeliveryOfficeName',
+        'title',
+        'employeeID'
+    ];
     private $conn = false;
 
     public function __construct(){
@@ -17,6 +29,7 @@ class ldapJFAL {
 
     public function search(){
         $resource = ldap_search($this->conn, self::base, self::filter, $this->attrs);
+        ldap_sort($this->conn, $resource, 'DisplayName');
         return ldap_get_entries($this->conn, $resource);
     }
 }
