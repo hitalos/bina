@@ -1,4 +1,5 @@
 <?php
+ini_set('zlib.output_compression', 'On');
 require_once('classes/ldapJFAL.class.php');
 
 $path = explode('/', $_SERVER['REQUEST_URI']);
@@ -17,6 +18,7 @@ switch($path[1]){
 		require_once('views/grandstream.php');
 		break;
 	default:
+		ini_set('zlib.output_compression', 'Off');
 		return false;
 }
 //Saída para log

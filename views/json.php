@@ -1,4 +1,12 @@
 <?php
+$cachefile = "cache/" . $_SERVER['REQUEST_URI'];
+$cachetime = 5 * 60; // 5 minutes
+if (file_exists($cachefile) && (time() - $cachetime < filemtime($cachefile))) {
+	header('Content-Type: application/json;charset=utf8');
+    include($cachefile);
+    exit;
+}
+ob_start();
 $ldap = new ldapJFAL;
 $result = $ldap->search();
 
@@ -16,4 +24,10 @@ foreach($result as $key => $person){
 }
 
 header('Content-Type: application/json;charset=utf8');
-echo json_encode($list, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+echo json_encode($list, JSON_UNESCAPED_UNICODE);
+
+
+$fp = fopen($cachefile, 'w');
+fwrite($fp, ob_get_contents());
+fclose($fp);
+ob_end_flush();

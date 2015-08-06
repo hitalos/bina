@@ -1,1 +1,4 @@
 js/vendors
+/vendor/
+composer.lock
+/cache/*
