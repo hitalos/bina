@@ -21,7 +21,7 @@
             <input ng-model="search" id='search' placeholder="fulano da silva" tabindex="1">
             <div class="badge">{{(contatos | filter:search).length}}</div>
         </header>
-        <content class="row">
+        <content class="sr-only" ng-attr-class="{{search.length > 2 ? 'row' : 'sr-only'}}">
             <div ng-if="search.length > 2">
                 <div class="col-md-4 col-sm-6" ng-repeat="contato in contatos | filter:search | orderBy:'displayname'">
                     <div class="card panel panel-warning">
