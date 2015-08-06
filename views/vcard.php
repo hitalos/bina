@@ -22,7 +22,9 @@ $vcard->addJobtitle($result[0]['title'][0]);
 $vcard->addCompany('Justiça Federal em Alagoas');
 $vcard->addEmail($result[0]['mail'][0], 'WORK');
 $vcard->addPhoneNumber('082 2122-' . $result[0]['ipphone'][0], 'PREF;WORK');
-$vcard->addPhoneNumber('0' . $result[0]['mobile'][0], 'CELL');
+if(isset($result[0]['mobile'][0])){
+    $vcard->addPhoneNumber('0' . $result[0]['mobile'][0], 'CELL');
+}
 $vcard->addPhoto('http://www.jfal.jus.br/images/fotos3x4/' . $path[2] . '.jpg');
 
 return $vcard->download();
