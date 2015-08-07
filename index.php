@@ -50,5 +50,5 @@ else{
 }
 //Saída para log
 $stdout = fopen('php://stdout', 'a');
-fwrite($stdout, $_SERVER['REMOTE_ADDR'] . ' ' . $_SERVER['REQUEST_URI'] . "\n");
+fwrite($stdout, $_SERVER['HTTP_USER_AGENT'] . "\t" . $_SERVER['REMOTE_ADDR'] . "\t" . $_SERVER['REQUEST_URI'] . "\n");
 fclose($stdout);
