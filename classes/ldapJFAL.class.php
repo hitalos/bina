@@ -16,7 +16,8 @@ class ldapJFAL {
         'Department',
         'PhysicalDeliveryOfficeName',
         'title',
-        'employeeID'
+        'employeeID',
+        'useraccountcontrol'
     ];
     private $conn = false;
 
@@ -30,6 +31,14 @@ class ldapJFAL {
     public function search(){
         $resource = ldap_search($this->conn, self::base, $this->filter, $this->attrs);
         ldap_sort($this->conn, $resource, 'DisplayName');
-        return ldap_get_entries($this->conn, $resource);
+        $list = ldap_get_entries($this->conn, $resource);
+        foreach($list as $key => &$person){
+            if(is_numeric($key)){
+                if(!($person['useraccountcontrol'][0] & 0x2)){
+                    unset($list[$key]);
+                }
+            }
+        }
+        return $list;
     }
 }
