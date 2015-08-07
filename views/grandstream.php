@@ -1,5 +1,5 @@
 <?php
-$cachefile = "cache/" . $_SERVER['REQUEST_URI'];
+$cachefile = "/tmp/cache/" . $_SERVER['REQUEST_URI'];
 $cachetime = 5 * 60; // 5 minutes
 if (file_exists($cachefile) && (time() - $cachetime < filemtime($cachefile))) {
 	header('Content-Type: text/xml;charset=utf8');
@@ -14,10 +14,9 @@ $list = $ldap->search();
 
 $doc = new DomDocument('1.0', 'UTF-8');
 $root = $doc->appendChild($doc->createElement('AddressBook'));
-$root->setAttribute('count', count($list));
 
-foreach($list as $person){
-	if(isset($person['ipphone'])){
+foreach($list as $key => $person){
+	if(is_numeric($key)){
 		$contato = $root->appendChild($doc->createElement('Contact'));
 		$displayName = utf8_encode($person['displayname'][0]);
 		$names = explode(' ', $displayName);
@@ -32,11 +31,18 @@ foreach($list as $person){
 		$phone = $contato->appendChild($doc->createElement('Phone'));
 		$phone->appendChild($doc->createElement('phonenumber', $person['ipphone'][0]));
 	}
+	else {
+		unset($list[$key]);
+	}
 }
+$root->setAttribute('count', count($list));
+
 header('Content-Type: text/xml;charset=utf8');
 echo $doc->saveXML();
 
-
+if(!file_exists('/tmp/cache')){
+	mkdir("/tmp/cache");
+}
 $fp = fopen($cachefile, 'w');
 fwrite($fp, ob_get_contents());
 fclose($fp);
