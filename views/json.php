@@ -27,6 +27,7 @@ else{
 	            if(isset($person[strtolower($attr)][0]) && trim($person[strtolower($attr)][0]) != ''){
 	                $contato[strtolower($attr)] = utf8_encode(trim($person[strtolower($attr)][0]));
 	            }
+				$contato['dn'] = utf8_encode(trim($person['dn']));
 	        }
 	        $list[] = $contato;
 	    }
