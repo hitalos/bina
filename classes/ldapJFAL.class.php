@@ -34,7 +34,7 @@ class ldapJFAL {
         $list = ldap_get_entries($this->conn, $resource);
         foreach($list as $key => &$person){
             if(is_numeric($key)){
-                if(!($person['useraccountcontrol'][0] & 0x2)){
+                if(isset($person['useraccountcontrol']) and ($person['useraccountcontrol'][0] & 0x2)){
                     unset($list[$key]);
                 }
             }
