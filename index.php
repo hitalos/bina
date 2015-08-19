@@ -15,7 +15,7 @@ switch($extension){
 		break;
 }
 if(file_exists($file)){
-	if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= filemtime($file)) {
+	if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= filemtime($file) && $_SERVER['HTTP_CACHE_CONTROL'] != 'no-cache') {
     	header('HTTP/1.0 304 Not Modified');
 	}
 	else{
@@ -42,6 +42,9 @@ else{
 		case 'gs_phonebook.xml':
 			ini_set('zlib.output_compression', 'Off');
 			require_once('views/grandstream.php');
+			break;
+		case 'update':
+			require_once('views/update.php');
 			break;
 		default:
 			ini_set('zlib.output_compression', 'Off');

@@ -1,7 +1,11 @@
 <?php
 $cachefile = "/tmp/cache/" . $_SERVER['REQUEST_URI'];
 $cachetime = 5 * 60; // 5 minutes
-if (file_exists($cachefile) && (time() - $cachetime < filemtime($cachefile))) {
+$usecache = true;
+if(isset($_SERVER['HTTP_CACHE_CONTROL']) and $_SERVER['HTTP_CACHE_CONTROL'] == 'no-cache'){
+	$usecache = false;
+}
+if ($usecache && file_exists($cachefile) && (time() - $cachetime < filemtime($cachefile))) {
 	if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= filemtime($cachefile)) {
 		header('HTTP/1.0 304 Not Modified');
 	}
