@@ -8,9 +8,6 @@ header {
 .card {
     min-height: 16.8em;
 }
-.panel-body {
-    font-weight: bold;
-}
 .panel-heading {
     background-repeat: no-repeat;
     background-position: top right;
@@ -18,7 +15,7 @@ header {
     padding-right: 62px;
 }
 .panel-body span {
-    font-weight: normal;
+    font-weight: bold;
 }
 div.ramal {
     font-size: 2em;

@@ -31,22 +31,22 @@
                         </div>
                         <div class="panel-body">
                             <div class="ramal" ng-if="contato.ipphone">
-                                <span class="glyphicon glyphicon-earphone"></span> Ramal: <a href="tel:{{contato.ipphone}}">{{contato.ipphone}}</a>
+                                <span class="glyphicon glyphicon-earphone"></span> Ramal: <span><a href="tel:{{contato.ipphone}}">{{contato.ipphone}}</a></span>
                             </div>
                             <div ng-if="contato.facsimiletelephonenumber">
-                                <span class="glyphicon glyphicon-print"> Fax:</span> {{contato.facsimiletelephonenumber}}
+                                <span class="glyphicon glyphicon-print"></span> Fax: <span>{{contato.facsimiletelephonenumber}}</span>
                             </div>
                             <div ng-if="contato.mobile">
-                                <span class="glyphicon glyphicon-phone"> Móvel:</span> <a href="tel:0{{contato.mobile}}">{{contato.mobile}}</a>
+                                <span class="glyphicon glyphicon-phone"></span> Móvel: <span><a href="tel:0{{contato.mobile}}">{{contato.mobile}}</a></span>
                             </div>
                             <div ng-if="contato.mail">
-                                <span class="glyphicon glyphicon-envelope"> Mail:</span> <a class="text-warning" href="mailto:{{contato.mail}}">{{contato.mail}}</a>
+                                <span class="glyphicon glyphicon-envelope"></span> Mail: <span><a class="text-warning" href="mailto:{{contato.mail}}">{{contato.mail}}</a></span>
                             </div>
                             <div ng-if="contato.title">
-                                <span class="glyphicon glyphicon-link"> Vínculo:</span> {{contato.title}}
+                                <span class="glyphicon glyphicon-link"></span> Vínculo: <span>{{contato.title}}</span>
                             </div>
                             <div>
-                                <span class="glyphicon glyphicon-briefcase"> Lotação:</span> {{contato.department}} - {{contato.physicaldeliveryofficename}}
+                                <span class="glyphicon glyphicon-briefcase"></span> Lotação: <span>{{contato.department}}<span ng-if="contato.physicaldeliveryofficename"> - {{contato.physicaldeliveryofficename}}</span></span>
                             </div>
                         </div>
                     </div>
