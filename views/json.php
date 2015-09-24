@@ -28,8 +28,11 @@ else{
 	    $contato = array();
 	    if(is_numeric($key)){
 	        foreach($ldap->attrs as $attr){
-	            if(isset($person[strtolower($attr)][0]) && trim($person[strtolower($attr)][0]) != ''){
-	                $contato[strtolower($attr)] = utf8_encode(trim($person[strtolower($attr)][0]));
+	            if(isset($person[strtolower($attr)])){
+					array_shift($person[strtolower($attr)]);
+					foreach($person[strtolower($attr)] as $info){
+	                	$contato[strtolower($attr)][] = utf8_encode(trim($info));
+					}
 	            }
 	        }
 	        $list[] = $contato;

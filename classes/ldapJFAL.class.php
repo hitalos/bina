@@ -17,6 +17,7 @@ class ldapJFAL {
         'PhysicalDeliveryOfficeName',
         'title',
         'employeeID',
+		'proxyAddresses',
         'useraccountcontrol'
     ];
     private $conn = false;
