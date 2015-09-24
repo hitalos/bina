@@ -15,7 +15,7 @@ switch($extension){
 		break;
 }
 if(file_exists($file)){
-	if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= filemtime($file) && $_SERVER['HTTP_CACHE_CONTROL'] != 'no-cache') {
+	if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= filemtime($file) && (isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] != 'no-cache')) {
     	header('HTTP/1.0 304 Not Modified');
 	}
 	else{
@@ -51,7 +51,3 @@ else{
 			return false;
 	}
 }
-//Saída para log
-$stdout = fopen('php://stdout', 'a');
-fwrite($stdout, $_SERVER['HTTP_USER_AGENT'] . "\t" . $_SERVER['REMOTE_ADDR'] . "\t" . $_SERVER['REQUEST_URI'] . "\n");
-fclose($stdout);
