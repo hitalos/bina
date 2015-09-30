@@ -30,24 +30,32 @@ if(file_exists($file)){
 else{
 	switch($path[1]){
 		case '':
-			require_once('views/busca.html');
+			$file = 'views/busca.html';
+			$type = 'text/html';
+			header('Last-Modified: ' . gmdate('D, d M Y H:i:s \G\M\T', filemtime($file)));
 			break;
 		case 'vcard':
 			require_once('views/vcard.php');
-			break;
+			die();
 		case 'index.json':
-			require_once('views/json.php');
+			$file = 'views/json.php';
+			$type = 'application/json';
+			header('Last-Modified: ' . gmdate('D, d M Y H:i:s \G\M\T', time()));
 			break;
 		case 'phonebook.xml':
 		case 'gs_phonebook.xml':
 			ini_set('zlib.output_compression', 'Off');
-			require_once('views/grandstream.php');
-			break;
-		case 'update':
-			require_once('views/update.php');
+			header('Last-Modified: ' . gmdate('D, d M Y H:i:s \G\M\T', time()));
+			$file = 'views/grandstream.php';
+			$type = 'text/xml';
 			break;
 		default:
 			ini_set('zlib.output_compression', 'Off');
 			return false;
 	}
+	header('Cache-Control: max-age=' . 60 * 60);
+	header("Pragma: cache");
+	header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 60 * 60));
+	header('Content-Type: ' . $type);
+	require $file;
 }
