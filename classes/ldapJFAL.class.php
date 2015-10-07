@@ -4,7 +4,7 @@ class ldapJFAL {
     const base = 'ou=JFAL - Usuarios,dc=jfal,dc=jus,dc=br';
     const user = 'bina@jfal.jus.br';
     const pass = 'bina@p0rt4r14';
-    public $filter = '(&(objectClass=user)(objectCategory=person)(ipPhone=*))';
+    public $filter = '(|(&(objectClass=user)(objectCategory=person)(&(objectCategory=person)(objectClass=contact)))(ipPhone=*))';
     public $attrs = [
         'DisplayName',
         'sAMAccountName',
@@ -18,6 +18,7 @@ class ldapJFAL {
         'title',
         'employeeID',
 		'proxyAddresses',
+		'objectClass',
         'useraccountcontrol'
     ];
     private $conn = false;
