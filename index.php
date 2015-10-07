@@ -19,10 +19,10 @@ if(file_exists($file)){
     	header('HTTP/1.0 304 Not Modified');
 	}
 	else{
-		header('Cache-Control: max-age=' . 60 * 60);
+		header('Cache-Control: max-age=' . 60 * 60 * 24);
 		header("Pragma: cache");
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s \G\M\T', filemtime($file)));
-		header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 60 * 60));
+		header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 60 * 60 * 24));
 		header('Content-Type: ' . $type);
 		require_once($file);
 	}
