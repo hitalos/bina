@@ -43,7 +43,9 @@ echo $doc->saveXML();
 if(!file_exists('/tmp/cache')){
 	mkdir("/tmp/cache");
 }
-$fp = fopen($cachefile, 'w');
-fwrite($fp, ob_get_contents());
-fclose($fp);
+if(file_exists($cachefile)){
+	$fp = fopen($cachefile, 'w');
+	fwrite($fp, ob_get_contents());
+	fclose($fp);
+}
 ob_end_flush();

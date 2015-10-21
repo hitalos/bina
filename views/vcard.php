@@ -10,6 +10,7 @@ $displayName = utf8_encode($result[0]['displayname'][0]);
 $names = explode(' ', $displayName);
 $firstName = array_shift($names);
 $lastName = array_pop($names);
+$middleNames = '';
 if(count($names)){
     $middleNames = implode(' ', $names);
 }
