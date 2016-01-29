@@ -48,6 +48,8 @@ else{
 			header('Last-Modified: ' . gmdate('D, d M Y H:i:s \G\M\T', time()));
 			$file = 'views/grandstream.php';
 			$type = 'text/xml';
+		case 'yealink.xml':
+			$file = 'views/yealink.php';
 			break;
 		default:
 			ini_set('zlib.output_compression', 'Off');
