@@ -1,5 +1,6 @@
-js/vendors
+public/vendors
 /vendor/
 composer.lock
 /cache/*
 node_modules/*
+.env

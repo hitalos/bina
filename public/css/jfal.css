@@ -1,3 +1,14 @@
+@media only screen and (min-device-width: 768px) {
+    .card {
+        min-height: 18.2em;
+    }
+}
+@media only screen and (max-device-width: 768px) {
+    h4 {
+        font-size: 1em;
+    }
+}
+
 #search {
     margin-bottom: 1em;
     padding: 0 0.2em;
@@ -6,14 +17,22 @@ header {
     background-color: #fcf8e3;
     padding: 0 1em 0 1em;
 }
+h4 {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0.4em;
+    height: 61px;
+}
 .card {
-    min-height: 18.2em;
+    vertical-align: bottom;
+    min-width: 290px;
 }
 .panel-heading {
     background-repeat: no-repeat;
     background-position: top right;
     background-size: 62px 62px;
-    padding-right: 62px;
+    padding: 0 62px 0 0.4em;
+    min-height: 62px;
 }
 .panel-body span {
     font-weight: bold;
@@ -39,7 +58,7 @@ footer {
 .vcard {
     float: right;
     margin-right: -62px;
-    margin-top: -52px;
+    margin-top: -62px;
     width: 62px;
     height: 62px;
 }

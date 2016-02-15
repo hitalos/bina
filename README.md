@@ -9,7 +9,6 @@ Para instalação das dependências precisa-se dos seguintes executáveis no SO:
  * `json`
  * `ldap`
  * `xml`
- * `zlib`
 * `npm` (gerenciador de pacotes do **nodeJS** usado para instalar o bower)
 * `composer` (gerenciador de pacotes do PHP)
 
@@ -29,16 +28,6 @@ Gerar a imagem:
 ```
 docker build -t bina .
 ```
-Instalar as dependências:
-```
-#Javascript
-docker run --rm -it -v $PWD:/var/www node npm --prefix /var/www install bower
-docker run --rm -it -v $PWD:/var/www node /var/www/node_modules/bower/bin/bower --allow-root
-
-#PHP
-docker run --rm -it -v $PWD:/var/www bina curl -o composer.phar https://getcomposer.org/composer.phar
-docker run --rm -it -v $PWD:/var/www bina php composer.phar install
-```
 Executar o container (trocar a porta se necessário ou usar um proxy reverso como o **NGINX**):  
 ```
 docker run -d --name jacunbina -v $PWD:/var/www -p 80:80 bina
@@ -53,5 +42,5 @@ docker run -d --name jacunbina -v $PWD:/var/www -p 80:80 bina
 #### PHP (Built-in Server)
 Execute o comando:  
 ```
-php -S 0.0.0.0:80 index.php
+php -S 0.0.0.0:80 -t public public/index.php
 ```

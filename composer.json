@@ -1,13 +1,26 @@
 {
     "name": "hitalos/bina",
-    "description": "Busca de ramais no Active Directory da JFAL",
+    "description": "Busca de ramais no Active Directory",
     "require": {
-        "jeroendesloovere/vcard": "^1.2"
+        "php": ">=5.5.0",
+        "jeroendesloovere/vcard": "^1.2",
+        "slim/slim": "^3.1",
+        "vlucas/phpdotenv": "^2.2"
     },
     "authors": [
         {
             "name": "Hítalo Silva",
             "email": "hitalos@jfal.jus.br"
         }
-    ]
+    ],
+    "autoload": {
+        "psr-4": {
+            "Bina\\": "src/"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+          "php -r \"if(!file_exists('.env')){ copy('.env.example', '.env'); } mkdir('cache'); \""
+        ]
+    }
 }

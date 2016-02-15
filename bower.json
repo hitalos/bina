@@ -9,7 +9,7 @@
   "license": "MIT",
   "ignore": [
     "**/.*",
-    "js/vendors"
+    "public/vendors"
   ],
   "dependencies": {
     "angular": "~1.2",
