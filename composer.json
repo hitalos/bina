@@ -20,7 +20,7 @@
     },
     "scripts": {
         "post-install-cmd": [
-          "php -r \"if(!file_exists('.env')){ copy('.env.example', '.env'); } mkdir('cache'); \""
+          "php -r \"if(!file_exists('.env')){ copy('.env.example', '.env'); } if(!file_exists('cache')){ mkdir('cache'); } \""
         ]
     }
 }

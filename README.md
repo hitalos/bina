@@ -15,7 +15,6 @@ Para instalação das dependências precisa-se dos seguintes executáveis no SO:
 ## Instalação das dependências
 Execute os comandos abaixo:  
 ```
-sudo npm install -g bower
 bower install
 composer install
 ```
