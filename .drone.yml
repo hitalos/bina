@@ -1,0 +1,4 @@
+build:
+    image: bina
+    commands:
+        - go get
