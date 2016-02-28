@@ -94,14 +94,14 @@ class LdapSearcher {
         $cachefile = "$cachedir/$name.json";
 
         if (file_exists($cachefile) && time() - getenv('CACHETIME') < filemtime($cachefile)) {
-            return json_decode(file_get_contents($cachefile), true);
+            $this->list = json_decode(file_get_contents($cachefile), true);
         }
         else{
             $this->search();
             $cached = fopen($cachefile, 'w');
             fwrite($cached, json_encode($this->list));
             fclose($cached);
-            return $this->list;
         }
+        return $this->list;
     }
 }
