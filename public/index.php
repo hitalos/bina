@@ -12,17 +12,7 @@ require __DIR__ . '/../vendor/autoload.php';
 $dotenv = new Dotenv\Dotenv(__DIR__ . '/..');
 $dotenv->load();
 
-$app = new \Slim\App([
-    'settings' => ['displayErrorDetails' => getenv('DEBUG')]
-]);
-
-$container = $app->getContainer();
-
-// ldap searcher
-use \Bina\Services\LdapSearcher as Ldap;
-$container['ldap'] = function($c){
-    return new Ldap(getenv('LDAP_HOST'), getenv('LDAP_USER'), getenv('LDAP_PASS'), getenv('LDAP_BASE'));
-};
+$app = new Bina\Services\App();
 
 // Carrega rotas
 require __DIR__ . '/../src/routes.php';
