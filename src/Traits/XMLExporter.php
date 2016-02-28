@@ -2,7 +2,7 @@
 namespace Bina\Traits;
 
 
-trait Exporter
+trait XMLExporter
 {
     protected $doc;
     protected $root;

@@ -1,10 +1,10 @@
 <?php
 namespace Bina\Transformers;
 
-use Bina\Traits\Exporter;
+use Bina\Traits\XMLExporter;
 
 class Yealink {
-    use Exporter;
+    use XMLExporter;
 
     public function build($contatos){
         $this->root = $this->doc->appendChild($this->doc->createElement('JFALIPPhoneDirectory'));
