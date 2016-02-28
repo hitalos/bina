@@ -24,14 +24,12 @@ $app->get('/vcard/{contato}', function(\Slim\Http\Request $req, \Slim\Http\Respo
 $app->get('/xml/{format}', function(\Slim\Http\Request  $req, \Slim\Http\Response $res, $args){
     switch($args['format']){
         case 'yealink':
-            $this->ldap->attrs = ['DisplayName', 'ipPhone', 'mobile', 'telephoneNumber'];
             $doc = new Bina\Transformers\Yealink();
             break;
         case 'grandstream':
-            $this->ldap->attrs = ['DisplayName', 'ipPhone'];
             $doc = new Bina\Transformers\Grandstream();
     }
-    $doc->build($this->ldap->cache($args['format']));
+    $doc->build($this->ldap->cache());
 
     return $res->write($doc)->withHeader('Content-Type', 'text/xml; charset=UTF-8');
 });

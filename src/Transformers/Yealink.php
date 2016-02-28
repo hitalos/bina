@@ -13,29 +13,18 @@ class Yealink {
                 $contato = $this->root->appendChild($this->doc->createElement('DirectoryEntry'));
                 $contato->appendChild($this->doc->createElement('Name', ($person['displayname'][0])));
 
-                if(isset($person['ipphone'])){
-                    if(is_array($person['ipphone'])){
-                        $contato->appendChild($this->doc->createElement('Telephone', $person['ipphone'][0]));
-                    }
-                    else{
-                        $contato->appendChild($this->doc->createElement('Telephone', $person['ipphone']));
-                    }
+                $phones = [];
+                if(isset($person['ipphone']) and is_array($person['ipphone'])){
+                    $phones = $person['ipphone'];
                 }
-                if(isset($person['mobile'])){
-                    if(is_array($person['mobile'])){
-                        $contato->appendChild($this->doc->createElement('Telephone', $person['mobile'][0]));
-                    }
-                    else{
-                        $contato->appendChild($this->doc->createElement('Telephone', $person['mobile']));
-                    }
+                if(isset($person['mobile']) and is_array($person['mobile'])){
+                    $phones += $person['mobile'];
                 }
-                if(isset($person['telephonenumber'])){
-                    if(is_array($person['telephonenumber'])){
-                        $contato->appendChild($this->doc->createElement('Telephone', $person['telephonenumber'][0]));
-                    }
-                    else{
-                        $contato->appendChild($this->doc->createElement('Telephone', $person['telephonenumber']));
-                    }
+                if(isset($person['telephonenumber']) and is_array($person['telephonenumber'])){
+                    $phones += $person['telephonenumber'];
+                }
+                foreach($phones as $phone){
+                    $contato->appendChild($this->doc->createElement('Telephone', $phone));
                 }
             }
             else {
