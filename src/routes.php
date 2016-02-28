@@ -1,15 +1,15 @@
 <?php
-
+// Rota padrão para HTML de busca
 $app->get('/', function(\Slim\Http\Request $req, \Slim\Http\Response $res){
     return $res->write(file_get_contents(__DIR__ . '/../Templates/index.html'));
 });
 
-
+// Listagem completa de contatos codificada em JSON
 $app->get('/contatos/json', function(\Slim\Http\Request $req, \Slim\Http\Response $res){
     return $res->withJson($this->ldap->cache());
 });
 
-
+// Contato no formato VCF, para importação no Android, iOS, Outlook...
 $app->get('/vcard/{contato}', function(\Slim\Http\Request $req, \Slim\Http\Response $res, $args){
     $this->ldap->filter = '(&(objectClass=user)(objectCategory=person)(sAMAccountName=' . $args['contato'] . '))';
     $contato = $this->ldap->cache($args['contato']);
@@ -20,7 +20,7 @@ $app->get('/vcard/{contato}', function(\Slim\Http\Request $req, \Slim\Http\Respo
         ->write($card->buildVCard());
 });
 
-
+// Listagem completa em formato XML, para importação nos aparelhos VOIP
 $app->get('/xml/{format}', function(\Slim\Http\Request  $req, \Slim\Http\Response $res, $args){
     switch($args['format']){
         case 'yealink':

@@ -1,13 +1,27 @@
 <?php
 namespace Bina\Services;
 
+/**
+ * Serviço para buscar informações num servidor LDAP
+ */
 class LdapSearcher {
 
+    /** @var string $host IP do servidor LDAP */
     protected $host = '';
+
+    /** @var string $user Nome de usuário para realizar a conexão LDAP */
     protected $user = '';
+
+    /** @var string $pass Senha para conexão LDAP */
     protected $pass = '';
+
+    /** @var string $basedn Caminho do LDAP onde serão executadas as buscas */
     protected $basedn = '';
+
+    /** @var string $filter Query usada na busca LDAP */
     public $filter = '(|(&(objectClass=user)(objectCategory=person)(&(objectCategory=person)(objectClass=contact)))(ipPhone=*))';
+
+    /** @var string[] $attrs Atributos desejados no retorno das buscas */
     public $attrs = [
         'DisplayName',
         'sAMAccountName',
@@ -24,10 +38,22 @@ class LdapSearcher {
 		'objectClass',
         'useraccountcontrol'
     ];
+
+    /** @var array $list Resultado da busca */
     public $list = [];
 
+    /** @var resource $conn objeto de conexão (nativo do PHP) */
     protected $conn = false;
 
+    /**
+     * Recebe parâmetros de conexão e configura no objeto
+     *
+     * @param     string $host
+     * @param     string $user
+     * @param     string $pass
+     * @param     string $basedn
+     * @return    void
+     */
     public function __construct($host, $user, $pass, $basedn)
     {
         $this->host = $host;
@@ -36,6 +62,11 @@ class LdapSearcher {
         $this->basedn = $basedn;
     }
 
+    /**
+     * Cria conexão se ainda não foi solicitado
+     *
+     * @return    void
+     */
     public function connect()
     {
         if(!$this->conn){
@@ -44,6 +75,11 @@ class LdapSearcher {
         }
     }
 
+    /**
+     * Executa busca no LDAP e retorna um array com o resultado
+     *
+     * @return    array
+     */
     public function search(){
         $this->connect();
         $resource = ldap_search(
@@ -85,6 +121,12 @@ class LdapSearcher {
         return $this->list;
     }
 
+    /**
+     * Executa buscas, lê e guarda resultado em cache
+     *
+     * @param     string $name Nome dado ao objeto em cache
+     * @return    array
+     */
     public function cache($name = 'default')
     {
         $cachedir = __DIR__ . '/../../cache';

@@ -3,11 +3,22 @@ namespace Bina\Transformers;
 
 use JeroenDesloovere\VCard\VCard;
 
+/**
+ * Transformer para gerar arquivos VCF
+ */
 class VcardCreator extends Vcard {
 
+    /**
+     * Constrói objeto Vcard e configura seus atributos
+     *
+     * @param     array $contato Array de atributos do contato
+     * @return    void
+     */
     public function __construct($contato)
     {
         $displayName = $contato['displayname'][0];
+
+        /** @var array $names Quebra string para manipulação */
         $names = explode(' ', $displayName);
         $firstName = array_shift($names);
         $lastName = array_pop($names);

@@ -3,9 +3,19 @@ namespace Bina\Transformers;
 
 use Bina\Traits\XMLExporter;
 
+/**
+ * Transformer para gerar XML no formato esperado pelos aparelhos VOIP da
+ * da Yealink
+ */
 class Yealink {
     use XMLExporter;
 
+    /**
+     * Constrói elementos do XML
+     *
+     * @param     array $contatos Lista a ser convertida
+     * @return    void
+     */
     public function build($contatos){
         $this->root = $this->doc->appendChild($this->doc->createElement('JFALIPPhoneDirectory'));
         foreach($contatos as $key => $person){
