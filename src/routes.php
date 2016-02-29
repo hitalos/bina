@@ -14,10 +14,13 @@ $app->get('/vcard/{contato}', function(\Slim\Http\Request $req, \Slim\Http\Respo
     $this->ldap->filter = '(&(objectClass=user)(objectCategory=person)(sAMAccountName=' . $args['contato'] . '))';
     $contato = $this->ldap->cache($args['contato']);
 
-    $card = new Bina\Transformers\VcardCreator($contato[0]);
-    return $res->withHeader('Content-Type', 'text/x-vcard; charset=utf-8')
-        ->withHeader('Content-Disposition', 'attachment; filename="' . $card->getFilename() . '.vcf"')
-        ->write($card->buildVCard());
+    if(count($contato)){
+        $card = new Bina\Transformers\VcardCreator($contato[0]);
+        return $res->withHeader('Content-Type', 'text/x-vcard; charset=utf-8')
+            ->withHeader('Content-Disposition', 'attachment; filename="' . $card->getFilename() . '.vcf"')
+            ->write($card->buildVCard());
+    }
+    else return $res->withStatus(404, 'Not Found');
 });
 
 // Listagem completa em formato XML, para importação nos aparelhos VOIP
