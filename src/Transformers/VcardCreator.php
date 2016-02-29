@@ -32,11 +32,27 @@ class VcardCreator extends Vcard {
         $this->addJobtitle($contato['title'][0]);
         $this->addCompany('Justiça Federal em Alagoas');
         $this->addNote('Lotação: ' . $contato['department'][0] . ' - ' . $contato['physicaldeliveryofficename'][0]);
-        $this->addEmail($contato['mail'][0], 'WORK');
-        $this->addPhoneNumber('082 2122-' . $contato['ipphone'][0], 'PREF;WORK');
-        if (isset($contato['mobile'][0])) {
-            $this->addPhoneNumber('0' . $contato['mobile'][0], 'CELL');
+        if(isset($contato['mail'])){
+            foreach($contato['mail'] as $mail){
+                $this->addEmail($mail, 'WORK');
+            }
         }
+        if(isset($contato['proxyaddresses'])){
+            foreach($contato['proxyaddresses'] as $mail){
+                $this->addEmail($mail, 'WORK');
+            }
+        }
+        if(isset($contato['ipphone'])){
+            foreach($contato['ipphone'] as $ipphone){
+                $this->addPhoneNumber('082 2122-' . $ipphone, 'WORK');
+            }
+        }
+        if(isset($contato['mobile'])){
+            foreach($contato['mobile'] as $mobile){
+                $this->addPhoneNumber('0' . $mobile, 'CELL');
+            }
+        }
+
         $this->addPhoto('http://www.jfal.jus.br/images/fotos3x4/' . $contato['samaccountname'][0] . '.jpg');
     }
 
