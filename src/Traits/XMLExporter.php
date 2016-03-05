@@ -17,7 +17,8 @@ trait XMLExporter
      *
      * @return    void
      */
-    public function __construct(){
+    public function __construct()
+    {
         $this->doc = new \DomDocument('1.0', 'UTF-8');
     }
 
@@ -26,7 +27,8 @@ trait XMLExporter
      *
      * @return    string
      */
-    public function __toString(){
+    public function __toString()
+    {
         return $this->doc->saveXML();
     }
 }

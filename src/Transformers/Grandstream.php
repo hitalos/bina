@@ -7,7 +7,8 @@ use Bina\Traits\XMLExporter;
  * Transformer para gerar XML no formato esperado pelos aparelhos VOIP da
  * da Grandstream
  */
-class Grandstream {
+class Grandstream
+{
     use XMLExporter;
 
     /**

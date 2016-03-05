@@ -4,7 +4,8 @@ namespace Bina\Services;
 /**
  * Extensão da aplicação padrão do Slim
  */
-class App extends \Slim\App {
+class App extends \Slim\App
+{
 
     /**
      * Constrói o objeto App e configura os serviços necessários
@@ -20,7 +21,7 @@ class App extends \Slim\App {
         $container = $this->getContainer();
 
         // Serviço ldap searcher
-        $container['ldap'] = function($c){
+        $container['ldap'] = function ($c) {
             return new LdapSearcher(
                 getenv('LDAP_HOST'),
                 getenv('LDAP_USER'),

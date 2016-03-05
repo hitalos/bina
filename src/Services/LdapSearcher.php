@@ -4,7 +4,8 @@ namespace Bina\Services;
 /**
  * Serviço para buscar informações num servidor LDAP
  */
-class LdapSearcher {
+class LdapSearcher
+{
 
     /** @var string $host IP do servidor LDAP */
     protected $host = '';
@@ -34,8 +35,8 @@ class LdapSearcher {
         'PhysicalDeliveryOfficeName',
         'title',
         'employeeID',
-		'proxyAddresses',
-		'objectClass',
+        'proxyAddresses',
+        'objectClass',
         'useraccountcontrol'
     ];
 
@@ -69,7 +70,7 @@ class LdapSearcher {
      */
     public function connect()
     {
-        if(!$this->conn){
+        if (!$this->conn) {
             $this->conn = ldap_connect($this->host);
             ldap_bind($this->conn, $this->user, $this->pass);
         }
@@ -80,7 +81,8 @@ class LdapSearcher {
      *
      * @return    array
      */
-    public function search(){
+    public function search()
+    {
         $this->connect();
         $resource = ldap_search(
             $this->conn,
@@ -89,23 +91,23 @@ class LdapSearcher {
             $this->attrs
         );
         $result = ldap_get_entries($this->conn, $resource);
-        foreach($result as $key => &$person){
-            if(is_numeric($key)){
-                if(isset($person['useraccountcontrol']) and ($person['useraccountcontrol'][0] & 0x2)){
+        foreach ($result as $key => &$person) {
+            if (is_numeric($key)) {
+                if (isset($person['useraccountcontrol']) and ($person['useraccountcontrol'][0] & 0x2)) {
                     unset($result[$key]);
                 }
-                if(isset($person['displayname'])){
+                if (isset($person['displayname'])) {
                     unset($person);
                 }
             }
         }
-        foreach($result as $key => $person){
+        foreach ($result as $key => $person) {
             $contato = array();
-            if(is_numeric($key)){
-                foreach($this->attrs as $attr){
-                    if(isset($person[strtolower($attr)])){
+            if (is_numeric($key)) {
+                foreach ($this->attrs as $attr) {
+                    if (isset($person[strtolower($attr)])) {
                         array_shift($person[strtolower($attr)]);
-                        foreach($person[strtolower($attr)] as $info){
+                        foreach ($person[strtolower($attr)] as $info) {
                             $contato[strtolower($attr)][] = utf8_encode(trim($info));
                         }
                     }
@@ -113,9 +115,10 @@ class LdapSearcher {
                 $this->list[] = $contato;
             }
         }
-        usort($this->list, function($a, $b){
-            if ($a['displayname'] == $b['displayname'])
+        usort($this->list, function ($a, $b) {
+            if ($a['displayname'] == $b['displayname']) {
                 return 0;
+            }
             return $a['displayname'] < $b['displayname'] ? -1 : 1;
         });
         return $this->list;
@@ -130,15 +133,14 @@ class LdapSearcher {
     public function cache($name = 'default')
     {
         $cachedir = __DIR__ . '/../../cache';
-        if(!file_exists($cachedir)){
+        if (!file_exists($cachedir)) {
             mkdir($cachedir);
         }
         $cachefile = "$cachedir/$name.json";
 
         if (file_exists($cachefile) && time() - getenv('CACHETIME') < filemtime($cachefile)) {
             $this->list = json_decode(file_get_contents($cachefile), true);
-        }
-        else{
+        } else {
             $this->search();
             $cached = fopen($cachefile, 'w');
             fwrite($cached, json_encode($this->list));
