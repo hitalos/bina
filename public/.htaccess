@@ -2,5 +2,12 @@
     RewriteEngine On
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteRule (.*\.json|vcard\/.*|.*\.xml) /index.php [L]
+
+    RewriteRule  ^/.*phonebook.xml$  /xml/grandstream  [L]
+    RewriteRule  ^/yealink.xml$      /xml/yealink      [L]
+
+    RewriteRule  ^(.*)$  /index.php [L]
 </IfModule>
+
+ExpiresByType  text/javascript  "modification plus 1 days"
+ExpiresByType  text/css         "modification plus 1 days"
