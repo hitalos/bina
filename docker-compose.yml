@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+
+    web:
+        image: hitalos/laravel:latest
+        volumes:
+            - ./:/var/www
+        command: php -S 0.0.0.0:80 -t public public/index.php
+
+    proxy:
+        image: nginx
+        ports:
+            - 80:80
+        environment:
+            VIRTUAL_HOST: bina.jfal.jus.br
+        volumes:
+            - ./public:/var/www
+            - ./nginx.conf:/etc/nginx/nginx.conf
+        depends_on:
+            - web
