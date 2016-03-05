@@ -23,7 +23,7 @@ class Grandstream
         foreach ($contatos as $key => $person) {
             if (is_numeric($key)) {
                 $contato = $this->root->appendChild($this->doc->createElement('Contact'));
-                $displayName = utf8_encode($person['displayname'][0]);
+                $displayName = $person['displayname'][0];
                 $names = explode(' ', $displayName);
                 $firstName = array_shift($names);
                 $firstName .= ' ' . array_shift($names);
