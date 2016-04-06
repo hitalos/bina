@@ -6,7 +6,8 @@ $app->get('/', function (\Slim\Http\Request $req, \Slim\Http\Response $res) {
 
 // Listagem completa de contatos codificada em JSON
 $app->get('/contatos/json', function (\Slim\Http\Request $req, \Slim\Http\Response $res) {
-    return $res->withJson($this->ldap->cache());
+    return $res->withJson($this->ldap->cache())
+        ->withHeader('Access-Control-Allow-Origin', '*');
 });
 
 // Contato no formato VCF, para importação no Android, iOS, Outlook...
