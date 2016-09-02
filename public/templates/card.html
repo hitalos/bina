@@ -1,33 +1,33 @@
-<div class="card panel" ng-class="contato.objectclass.3 == 'contact' ? 'panel-info' : 'panel-warning'">
-    <div ng-if="contato.objectclass.3 == 'user'" class="panel-heading" style="background-image: url(http://www.jfal.jus.br/images/fotos3x4/{{ contato.samaccountname[0] }}.jpg)">
-        <h4><span class="glyphicon glyphicon-user"></span> {{ contato.displayname[0] }}</h4>
-        <a class="vcard" href="/vcard/{{ contato.samaccountname[0] }}" title="Clique para baixar o vcard"></a>
+<div class="card panel" ng-class="::contato.objectclass == 'contact' ? 'panel-info' : 'panel-warning'">
+    <div ng-if="::contato.objectclass === 'user'" class="panel-heading" style="background-image: url(http://www.jfal.jus.br/images/fotos3x4/{{::contato.samaccountname[0] }}.jpg)">
+        <h4><span class="glyphicon glyphicon-user"></span> <span ng-bind="::contato.displayname[0]"></span></h4>
+        <a class="vcard" href="/vcard/{{::contato.samaccountname[0] }}" title="Clique para baixar o vcard"></a>
     </div>
-    <div ng-if="contato.objectclass.3 == 'contact'" class="panel-heading">
-        <h4><span class="glyphicon glyphicon-phone-alt"></span> {{ contato.displayname[0] }}</h4>
+    <div ng-if="::contato.objectclass === 'contact'" class="panel-heading">
+        <h4><span class="glyphicon glyphicon-phone-alt"></span> <span ng-bind="::contato.displayname[0]"></span></h4>
     </div>
     <div class="panel-body">
-        <div class="ramal" ng-repeat="ipphone in contato.ipphone">
-            <span class="glyphicon glyphicon-earphone"></span> Ramal: <span><a href="tel:{{ ipphone }}">{{ ipphone }}</a></span>
+        <div class="ramal" ng-repeat="ipphone in ::contato.ipphone">
+            <span class="glyphicon glyphicon-earphone"></span> Ramal: <span><a href="tel:{{::ipphone }}" ng-bind="::ipphone"></a></span>
         </div>
-        <div ng-repeat="fax in contato.facsimiletelephonenumber">
-            <span class="glyphicon glyphicon-print"></span> Fax: <span>{{ fax }}</span>
+        <div ng-repeat="fax in ::contato.facsimiletelephonenumber">
+            <span class="glyphicon glyphicon-print"></span> Fax: <span ng-bind="::fax"></span>
         </div>
-        <div ng-repeat="mobile in contato.mobile">
-            <span class="glyphicon glyphicon-phone"></span> Móvel: <span><a href="tel:0{{ mobile }}">{{ mobile }}</a></span>
+        <div ng-repeat="mobile in ::contato.mobile">
+            <span class="glyphicon glyphicon-phone"></span> Móvel: <span><a href="tel:0{{::mobile }}" ng-bind="::mobile"></a></span>
         </div>
-        <div ng-if="contato.mail[0]">
-            <span class="glyphicon glyphicon-envelope"></span> Mail: <span><a class="text-warning" href="mailto:{{ contato.mail[0] }}">{{ contato.mail[0] }}</a></span>
+        <div ng-if="::contato.mail[0]">
+            <span class="glyphicon glyphicon-envelope"></span> Mail: <span><a class="text-warning" href="mailto:{{::contato.mail[0] }}" ng-bind="::contato.mail[0]"></a></span>
         </div>
-        <div ng-repeat="otherMail in contato.proxyaddresses">
-            <span class="glyphicon glyphicon-envelope"></span> Mail: <span><a class="text-warning" href="mailto:{{ otherMail }}">{{ otherMail }}</a></span>
+        <div ng-repeat="otherMail in ::contato.proxyaddresses">
+            <span class="glyphicon glyphicon-envelope"></span> Mail: <span><a class="text-warning" href="mailto:{{::otherMail }}" ng-bind="::otherMail"></a></span>
         </div>
-        <div ng-if="contato.title[0]">
-            <span class="glyphicon glyphicon-link"></span> Vínculo: <span>{{ contato.title[0] }}</span>
+        <div ng-if="::contato.title[0]">
+            <span class="glyphicon glyphicon-link"></span> Vínculo: <span ng-bind="::contato.title[0]"></span>
         </div>
         <div>
-            <span ng-if="contato.department[0]"><span class="glyphicon glyphicon-briefcase"></span> Lotação: <span>{{ contato.department[0] }}</span>
-            <span ng-if="contato.physicaldeliveryofficename[0]"> - {{ contato.physicaldeliveryofficename[0] }}</span>
+            <span ng-if="::contato.department[0]"><span class="glyphicon glyphicon-briefcase"></span> Lotação: <span ng-bind="::contato.department[0]"></span>
+            <span ng-if="::contato.physicaldeliveryofficename[0]"> - <span ng-bind="::contato.physicaldeliveryofficename[0]"></span></span>
         </div>
     </div>
 </div>

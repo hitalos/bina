@@ -34,7 +34,6 @@ class LdapSearcher
         'Department',
         'PhysicalDeliveryOfficeName',
         'title',
-        'employeeID',
         'proxyAddresses',
         'objectClass',
         'useraccountcontrol'
@@ -95,24 +94,32 @@ class LdapSearcher
             if (is_numeric($key)) {
                 if (isset($person['useraccountcontrol']) and ($person['useraccountcontrol'][0] & 0x2)) {
                     unset($result[$key]);
+                    continue;
                 }
-                if (isset($person['displayname'])) {
-                    unset($person);
+                unset($person['useraccountcontrol']);
+                if (!isset($person['displayname'])) {
+                    unset($result[$key]);
                 }
+            } else {
+                unset($result[$key]);
             }
         }
         foreach ($result as $key => $person) {
             $contato = array();
             if (is_numeric($key)) {
                 foreach ($this->attrs as $attr) {
-                    if (isset($person[strtolower($attr)])) {
-                        array_shift($person[strtolower($attr)]);
-                        foreach ($person[strtolower($attr)] as $info) {
-                            $contato[strtolower($attr)][] = utf8_encode(trim($info));
+                    $attr = strtolower($attr);
+                    if (isset($person[$attr])) {
+                        array_shift($person[$attr]);
+                        foreach ($person[$attr] as $info) {
+                            $contato[$attr][] = utf8_encode(trim($info));
                         }
                     }
                 }
-                $this->list[] = $contato;
+                if (isset($contato['displayname'])) {
+                    $contato['objectclass'] = $contato['objectclass'][3];
+                    $this->list[] = $contato;
+                }
             }
         }
         usort($this->list, function ($a, $b) {

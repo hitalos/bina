@@ -23,8 +23,8 @@
         </header>
         <content class="sr-only" ng-attr-class="{{search.length > 2 ? 'row' : 'sr-only'}}">
             <div ng-if="search.length > 2">
-                <div class="col-md-4 col-sm-6" ng-repeat="contato in contatos | filter:search | orderBy:'displayname'">
-                    <card />
+                <div class="col-md-4 col-sm-6" ng-repeat="contato in contatos | filter:search">
+                    <card contato="contato"/>
                 </div>
             </div>
         </content>

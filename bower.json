@@ -12,7 +12,7 @@
     "public/vendors"
   ],
   "dependencies": {
-    "angular": "~1.2",
+    "angular": "~1.5",
     "bootstrap": "~3.3",
     "jquery": "~2.1"
   }

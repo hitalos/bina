@@ -14,6 +14,9 @@ angular.module('bina', [])
     })
     .directive('card', function(){
         return {
+            scope: {
+                contato: '<'
+            },
             restrict: 'E',
             templateUrl: 'templates/card.html'
         };
