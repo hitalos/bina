@@ -104,7 +104,7 @@ class LdapSearcher
                 unset($result[$key]);
             }
         }
-        foreach ($result as $key => $person) {
+        foreach ($result as $key => &$person) {
             $contato = array();
             if (is_numeric($key)) {
                 foreach ($this->attrs as $attr) {
