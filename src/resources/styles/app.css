@@ -1,0 +1,9 @@
+.md-layout.user {
+  padding: 8px;
+}
+.md-layout.contact {
+  padding: 8px;
+}
+.md-layout.contact > .md-card {
+  background-color: #fec;
+}
