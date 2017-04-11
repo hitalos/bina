@@ -24,6 +24,19 @@ After install, edit file `.env` and set variables.
 #### Start app
     npm start
 
+## With Docker
+
+  Copy `.env-example` to `.env` and edit variables.
+  
+Run:
+
+    docker build -t bina .
+    docker run -p 3000:3000 --env-file .env bina
+
+or
+
+    docker-compose up -d
+
 ## Trying without LDAP Server
 
 Comment this line in `src/routes/contacts.js`:
