@@ -82,3 +82,9 @@ In this new folder, create a file `all.json` with "fake" contacts in this format
 ]
 ```
 Follow **install** instructions.
+
+## Debugging
+
+Before running app, set environment variable `DEBUG`:
+
+    DEBUG=Bina:* npm start

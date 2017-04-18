@@ -2,6 +2,7 @@
 
 require('dotenv').config()
 
+const debug = require('debug')('Bina:Server')
 const http = require('http')
 const app = require('../src/app')
 
@@ -9,6 +10,7 @@ const port = process.env.PORT || '3000'
 
 const server = http.createServer(app)
 
+debug('Starting http server…')
 server.listen(port, '0.0.0.0', () => {
   console.log(`Listening on port ${port}`)
 })

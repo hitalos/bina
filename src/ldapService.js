@@ -1,3 +1,4 @@
+const debug = require('debug')('Bina:LdapClient')
 const ldapjs = require('ldapjs')
 
 const idField = process.env.IDENT_FIELD
@@ -20,6 +21,7 @@ const resultCache = {
     return this.data ? (this.time.valueOf() + this.duration) < Date.now() : true
   },
   setData(data) {
+    debug('Saving data in cache')
     this.time = new Date()
     this.data = data
   },
@@ -27,11 +29,12 @@ const resultCache = {
 
 module.exports = (cb) => {
   if (!resultCache.expired()) {
-    // Using cache result
+    debug('Using cache result')
     cb(null, resultCache.data)
     return
   }
 
+  debug('Connecting to Ldap Server…')
   const ldapClient = ldapjs.createClient({
     url: process.env.LDAP_HOST,
     tlsOptions: {
@@ -42,6 +45,7 @@ module.exports = (cb) => {
   })
 
   ldapClient.bind(credentials.user, credentials.pass, (bindError) => {
+    debug(`Login in Ldap Server: ${process.env.LDAP_HOST}`)
     if (bindError) {
       cb(bindError, null)
       return
@@ -74,6 +78,8 @@ module.exports = (cb) => {
       attributes,
     }
     ldapClient.search(base, options, (errSearch, result) => {
+      debug(`BaseDN: ${base}`)
+      debug(`Searching with filter: ${options.filter}`)
       if (errSearch) {
         cb(errSearch, null)
         return
@@ -117,7 +123,7 @@ module.exports = (cb) => {
         // Order by displayName
         list.sort((a, b) => a.fullName.localeCompare(b.fullName))
 
-        // set cache
+        debug(`Found ${list.length} objects`)
         resultCache.setData(list)
         cb(null, list)
       })
