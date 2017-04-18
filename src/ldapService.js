@@ -5,39 +5,16 @@ const fullNameField = process.env.FULL_NAME_FIELD
 const phonesFields = process.env.PHONE_FIELDS.split(',')
 const otherFields = process.env.OTHER_FIELDS.split(',')
 const emailFields = process.env.EMAIL_FIELDS.split(',')
+const cacheDuration = process.env.CACHE_DURATION || 300 // default 5min
 
 const credentials = {
   user: process.env.LDAP_USER,
   pass: process.env.LDAP_PASS,
 }
-const ldapClient = ldapjs.createClient({
-  url: process.env.LDAP_HOST,
-  tlsOptions: {
-    rejectUnauthorized: false,
-  },
-  connectTimeout: 10000,
-  timeout: 10000,
-})
-
-ldapClient.on('error', (err) => {
-  console.log(err)
-  console.log(`Error connecting with ${process.env.LDAP_HOST}`)
-  process.exit(1)
-})
-
-ldapClient.on('timeout', () => {
-  console.log('Timeout consulting LDAP SERVER')
-  process.exit(1)
-})
-
-ldapClient.on('connectTimeout', () => {
-  console.log(`Timeout connecting with ${process.env.LDAP_HOST}`)
-  process.exit(1)
-})
 
 const resultCache = {
   time: new Date(),
-  duration: process.env.CACHE_DURATION || 5 * 60 * 1000, // default 5min
+  duration: cacheDuration * 1000, // time in milisseconds
   data: null,
   expired() {
     return this.data ? (this.time.valueOf() + this.duration) < Date.now() : true
@@ -54,6 +31,16 @@ module.exports = (cb) => {
     cb(null, resultCache.data)
     return
   }
+
+  const ldapClient = ldapjs.createClient({
+    url: process.env.LDAP_HOST,
+    tlsOptions: {
+      rejectUnauthorized: false,
+    },
+    connectTimeout: 10000,
+    timeout: 10000,
+  })
+
   ldapClient.bind(credentials.user, credentials.pass, (bindError) => {
     if (bindError) {
       cb(bindError, null)
@@ -61,7 +48,7 @@ module.exports = (cb) => {
     }
     const base = process.env.LDAP_BASE
     /* eslint prefer-template: 0 */
-    const filter = '(&' +
+    const filter = process.env.LDAP_FILTER || '(&' +
       '(|' +
       phonesFields.map(item => `(${item}=*)`).join('') +
       ')' +
