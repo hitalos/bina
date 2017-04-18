@@ -7,3 +7,38 @@
 .md-layout.contact > .md-card {
   background-color: #fec;
 }
+.md-card {
+  min-height: 264px;
+  justify-content: space-between;
+}
+.flip-container {
+  perspective: 1000px;
+}
+.flip-container.reverse .flipper {
+  transform: rotateY(180deg);
+}
+.flip-container, .front, .back {
+  width: 100%;
+}
+.flipper {
+  transition: 0.6s;
+  transform-style: preserve-3d;
+  position: relative;
+  height: 280px;
+}
+.front, .back {
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.front {
+  z-index: 2;
+  transform: rotateY(0deg);
+}
+.back {
+  transform: rotateY(180deg);
+}
+.back .md-card-actions {
+  align-items: flex-end;
+}

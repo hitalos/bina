@@ -85,34 +85,73 @@ const CardList = Vue.component('card-list', {
 const ContactCard = Vue.component('contact-card', {
   props: ['contact'],
   template:
-    `<md-layout :class="contact.objectClass">
-      <md-card class="md-flex-100 md-with-hover">
-        <md-card-header>
-          <md-card-header-text>
-            <div class="md-headline">{{ contact.fullName }}</div>
-          </md-card-header-text>
-          <md-card-media>
-            <img
-              v-if="contact.id"
-              :src="'/contacts/' + contact.id + '/photo.jpg'"
-              alt="Foto"
-            />
-            <img
-              v-if="!contact.id"
-              src="/images/logo.png"
-            />
-          </md-card-media>
-        </md-card-header>
-        <md-card-content>
-          <a class="md-display-2" :href="'tel:' + contact.phones.ipPhone">
-            {{ contact.phones.ipPhone }}
-          </a>
-        </md-card-content>
-        <md-card-actions>
-          <md-button>Ver mais detalhes</md-button>
-        </md-card-actions>
-      </md-card>
-    </md-layout>`,
+    `<div class="flip-container">
+      <div class="flipper">
+        <div class="front">
+          <md-layout :class="contact.objectClass">
+            <md-card class="md-flex-100 md-with-hover">
+              <md-card-header>
+                <md-card-header-text>
+                  <div class="md-headline">{{ contact.fullName }}</div>
+                </md-card-header-text>
+                <md-card-media>
+                  <img
+                    v-if="contact.id"
+                    :src="'/contacts/' + contact.id + '/photo.jpg'"
+                    alt="Foto"
+                  />
+                  <img
+                    v-if="!contact.id"
+                    src="/images/logo.png"
+                  />
+                </md-card-media>
+              </md-card-header>
+              <md-card-content>
+                <p v-if="contact.department">Lotação: <strong>{{ contact.department }}
+                  <span v-if="contact.physicalDeliveryOfficeName"> - {{ contact.physicalDeliveryOfficeName }}</span></strong>
+                </p>
+              </md-card-content>
+              <md-card-actions>
+                <md-button>
+                  <a class="md-display-2" :href="'tel:' + contact.phones.ipPhone">
+                    {{ contact.phones.ipPhone }}
+                  </a>
+                </md-button>
+                <div class="md-flex"/>
+                <md-button @click.native='invert'>Ver mais detalhes</md-button>
+              </md-card-actions>
+            </md-card>
+          </md-layout>
+        </div>
+        <div class="back">
+          <md-layout :class="contact.objectClass">
+            <md-card class="md-flex-100 md-with-hover">
+              <md-card-content>
+                <p v-if="contact.title">Vínculo: <strong>{{ contact.title }}</strong></p>
+                <p v-if="contact.emails.mail">Mail: <strong>{{ contact.emails.mail }}</strong></p>
+                <p v-if="contact.phones.mobile">Celular: <strong>{{ contact.phones.mobile }}</strong></p>
+                <p v-if="contact.phones.facsimileTelephoneNumber">Fax: <strong>{{ contact.phones.facsimileTelephoneNumber }}</strong></p>
+              </md-card-content>
+              <md-card-actions>
+                <md-button @click.native="revert">voltar</md-button>
+              </md-card-actions>
+            </md-card>
+          </md-layout>
+        </div>
+      </div>
+    </div>`,
+  methods: {
+    invert(event) {
+      const el = event.srcElement.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode
+      if (el.classList) el.classList.add('reverse')
+      else el.className += ' reverse'
+    },
+    revert(event) {
+      const el = event.srcElement.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode
+      if (el.classList) el.classList.remove('reverse')
+      else el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ')
+    },
+  },
 })
 
 Vue.use(VueMaterial)
