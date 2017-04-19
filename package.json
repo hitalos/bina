@@ -23,7 +23,8 @@
     "express": "^4.15.2",
     "helmet": "^3.5.0",
     "ldapjs": "^1.0.1",
-    "pug": "^2.0.0-beta11"
+    "pug": "^2.0.0-beta11",
+    "vcards-js": "^2.4.1"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.2",

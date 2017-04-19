@@ -97,7 +97,7 @@ const ContactCard = Vue.component('contact-card', {
                 <md-card-media>
                   <img
                     v-if="contact.id"
-                    :src="'/contacts/' + contact.id + '/photo.jpg'"
+                    :src="'/contacts/' + contact.id + '.jpg'"
                     alt="Foto"
                   />
                   <img
@@ -133,6 +133,10 @@ const ContactCard = Vue.component('contact-card', {
                 <p v-if="contact.phones.facsimileTelephoneNumber">Fax: <strong>{{ contact.phones.facsimileTelephoneNumber }}</strong></p>
               </md-card-content>
               <md-card-actions>
+                <md-button>
+                  <a :href="'/contacts/' + contact.id + '.vcf'">Baixar vCard</a>
+                </md-button>
+                <div class="md-flex"/>
                 <md-button @click.native="revert">voltar</md-button>
               </md-card-actions>
             </md-card>
