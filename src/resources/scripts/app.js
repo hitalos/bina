@@ -146,14 +146,14 @@ const ContactCard = Vue.component('contact-card', {
     </div>`,
   methods: {
     invert(event) {
-      const el = event.srcElement.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode
+      const el = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode
       if (el.classList) el.classList.add('reverse')
       else el.className += ' reverse'
     },
     revert(event) {
-      const el = event.srcElement.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode
+      const el = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode
       if (el.classList) el.classList.remove('reverse')
-      else el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ')
+      else el.className = el.className.replace(new RegExp(`(^|\\b)${className.split(' ').join('|')}(\\b|$)`, 'gi'), ' ')
     },
   },
 })

@@ -42,8 +42,13 @@ router.get('/:contact.vcf', (req, res) => {
     card.organization = contact.company
     card.title = contact.title
     card.role = contact.title
-    card.note = `${contact.department} - ${contact.physicalDeliveryOfficeName}`
-    card.note += '\n\n' + contact.description
+    card.note = contact.department
+    if (contact.physicalDeliveryOfficeName) {
+      card.note += ` - ${contact.physicalDeliveryOfficeName}`
+    }
+    if (contact.description) {
+      card.note += `\n\n${contact.description}`
+    }
     card.workPhone = contact.phones.telephoneNumber
     card.cellPhone = contact.phones.mobile
     card.homePhone = contact.phones.homePhone
@@ -53,15 +58,15 @@ router.get('/:contact.vcf', (req, res) => {
     card.source = `${req.protocol}://${req.get('Host')}${req.url}`
     card.logo.attachFromUrl(process.env.LOGO_URL, 'PNG')
 
-    http.get(`${process.env.PHOTOS_URL}${req.params.contact}.jpg`, (response) => {
       let rawData = ''
       response.on('data', (chunk) => { rawData += chunk })
+    http.get(`${process.env.PHOTOS_URL}${contact.id}.jpg`, (response) => {
       response.on('end', () => {
         card.photo.url = Buffer.from(rawData, 'binary').toString('base64')
         card.photo.mediaType = 'JPG'
         card.photo.base64 = true
         res.set('Content-Type', 'text/vcard')
-        res.set('Content-Disposition', `inline; filename="${req.params.contact}.vcf"`)
+        res.set('Content-Disposition', `inline; filename="${contact.fullName}.vcf"`)
         res.send(card.getFormattedString())
       })
     })
