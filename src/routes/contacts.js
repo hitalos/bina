@@ -58,11 +58,11 @@ router.get('/:contact.vcf', (req, res) => {
     card.source = `${req.protocol}://${req.get('Host')}${req.url}`
     card.logo.attachFromUrl(process.env.LOGO_URL, 'PNG')
 
-      let rawData = ''
-      response.on('data', (chunk) => { rawData += chunk })
     http.get(`${process.env.PHOTOS_URL}${contact.id}.jpg`, (response) => {
+      const rawData = []
+      response.on('data', (chunk) => { rawData.push(chunk) })
       response.on('end', () => {
-        card.photo.url = Buffer.from(rawData, 'binary').toString('base64')
+        card.photo.url = Buffer.concat(rawData).toString('base64')
         card.photo.mediaType = 'JPG'
         card.photo.base64 = true
         res.set('Content-Type', 'text/vcard')
