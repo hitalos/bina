@@ -37,52 +37,6 @@ or
 
     docker-compose up -d
 
-## Trying without LDAP Server
-
-Comment this line in `src/routes/contacts.js`:
-
-    const ldapService = require('../ldapService')
-
-Create contacts folder:
-
-    mkdir public/contacts
-
-In this new folder, create a file `all.json` with "fake" contacts in this format:
-
-```
-[
-  {
-    "id": "user_id_1",
-    "fullName": "Jonh Doe",
-    "phones": {
-      "ipPhone": "5555",
-      "mobile": "9999-9999"
-    },
-    "emails": {
-      "mail": "user_id_1@domain.com"
-    },
-    "department": "IT",
-    "title": "Employee",
-    "objectClass": "user"
-  },
-  {
-    "id": "user_id_2",
-    "fullName": "Jane Doe",
-    "phones": {
-      "ipPhone": "5556",
-      "telephoneNumber": "555-5555"
-    },
-    "emails": {
-      "mail": "user_id_2@domain.com"
-    },
-    "department": "marketing",
-    "title": "Outsourced",
-    "objectClass": "contact"
-  }
-]
-```
-Follow **install** instructions.
-
 ## Debugging
 
 Before running app, set environment variable `DEBUG`:

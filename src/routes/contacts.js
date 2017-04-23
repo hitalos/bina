@@ -1,3 +1,4 @@
+const crypto = require('crypto')
 const debug = require('debug')('Bina:Contacts')
 const http = require('http')
 const router = require('express').Router()
@@ -14,14 +15,25 @@ router.get('/all.json', (req, res) => {
 })
 
 router.get('/:contact.jpg', (req, res) => {
-  res.redirect(`${process.env.PHOTOS_URL}${req.params.contact}.jpg`)
+  if (process.env.ENABLE_GRAVATAR) {
+    ldapService((err, result) => {
+      if (err) throw err
+      const contact = result.filter(item => item.id === req.params.contact)[0]
+      const email = contact.emails.mail
+      const md5Hash = crypto.createHash('md5').update(email).digest('hex')
+
+      res.redirect(`http://www.gravatar.com/avatar/${md5Hash}`)
+    })
+  } else {
+    res.redirect(`${process.env.PHOTOS_URL}${req.params.contact}.jpg`)
+  }
 })
 
 router.get('/:contact.vcf', (req, res) => {
   debug(`Getting vCard contact (${req.params.contact})`)
   ldapService((err, result) => {
     if (err) throw err
-    const contact = result.filter(item => item.id && item.id === req.params.contact)[0]
+    const contact = result.filter(item => item.id === req.params.contact)[0]
     const card = vCard()
     card.firstName = contact.fullName.split(' ').shift()
     card.middleName = contact.fullName.split(' ').slice(1, -1).join(' ')
