@@ -19,6 +19,10 @@ router.get('/:contact.jpg', (req, res) => {
     ldapService((err, result) => {
       if (err) throw err
       const contact = result.filter(item => item.id === req.params.contact)[0]
+      if (!contact.emails.mail) {
+        res.redirect(process.env.LOGO_URL)
+        return
+      }
       const email = contact.emails.mail
       const md5Hash = crypto.createHash('md5').update(email).digest('hex')
 
