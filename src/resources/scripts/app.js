@@ -133,7 +133,7 @@ const ContactCard = Vue.component('contact-card', {
                 <p v-if="contact.phones.facsimileTelephoneNumber">Fax: <strong>{{ contact.phones.facsimileTelephoneNumber }}</strong></p>
               </md-card-content>
               <md-card-actions>
-                <md-button>
+                <md-button v-if="contact.objectClass=='user'">
                   <a :href="'/contacts/' + contact.id + '.vcf'">Baixar vCard</a>
                 </md-button>
                 <div class="md-flex"/>
