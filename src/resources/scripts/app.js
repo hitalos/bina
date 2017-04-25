@@ -17,18 +17,23 @@ function removeAccents(str) {
 }
 
 function show(contact, searchTerms) {
+  const terms = removeAccents(searchTerms).toLowerCase().trim()
+    .replace(/\s\s+/g, ' ')
+    .split(' ')
   const fullName = removeAccents(contact.fullName).toLowerCase()
-  const str = removeAccents(searchTerms).toLowerCase()
-  if (fullName.indexOf(str) >= 0) return true
+  const phones = Object.keys(contact.phones).map(key => contact.phones[key])
+
+  if (terms.every(str => fullName.indexOf(str) >= 0)) return true
   if (contact.department) {
-    const department = removeAccents(contact.department).toLowerCase()
-    if (department.indexOf(str) >= 0) return true
+    const department = removeAccents(`${contact.department} ${contact.physicalDeliveryOfficeName || ''}`).toLowerCase()
+    if (terms.every(str => department.indexOf(str) >= 0)) return true
   }
   if (contact.title) {
     const title = removeAccents(contact.title).toLowerCase()
-    if (title.indexOf(str) >= 0) return true
+    if (terms.every(str => title.indexOf(str) >= 0)) return true
   }
-  return false
+
+  return terms.some(str => phones.some(phone => phone.indexOf(str) >= 0))
 }
 
 const bus = new Vue()
@@ -69,7 +74,7 @@ const CardList = Vue.component('card-list', {
   },
   created() {
     this.$http.get('/contacts/all.json').then((response) => {
-      this.$data.contacts = response.body.map((contact) => {
+      this.contacts = response.body.map((contact) => {
         contact.show = false
         return contact
       })
