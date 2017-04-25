@@ -4,7 +4,7 @@
   "description": "A web App to search in a LDAP for users and contacts.",
   "scripts": {
     "start": "node bin/www",
-    "build": "gulp",
+    "build": "NODE_ENV=production gulp",
     "copy-env": "gulp copy-env",
     "lint": "eslint bin/www ./gulpfile.js src/",
     "test": "npm run lint --silent"
