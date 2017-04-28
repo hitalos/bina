@@ -89,13 +89,30 @@ const CardList = Vue.component('card-list', {
 
 const ContactCard = Vue.component('contact-card', {
   props: ['contact'],
+  data() {
+    return {
+      labels: {
+        telephoneNumber: 'Principal',
+        mobile: 'Celular',
+        ipPhone: 'VoIP',
+        facsimileTelephoneNumber: 'Fax',
+        homePhone: 'Casa',
+        otherTelephone: 'Outro'
+      },
+    }
+  },
+  computed: {
+    defaultPhone() {
+      return this.contact.phones[Object.keys(this.contact.phones)[0]]
+    },
+  },
   template:
     `<div class="flip-container">
       <div class="flipper">
         <div class="front">
           <md-layout :class="contact.objectClass">
             <md-card class="md-flex-100 md-with-hover">
-              <md-card-header>
+              <md-card-header :title='"Vínculo: " + contact.title'>
                 <md-card-header-text>
                   <div class="md-headline">{{ contact.fullName }}</div>
                 </md-card-header-text>
@@ -117,9 +134,9 @@ const ContactCard = Vue.component('contact-card', {
                 </p>
               </md-card-content>
               <md-card-actions>
-                <md-button>
-                  <a class="md-display-2" :href="'tel:' + contact.phones.ipPhone">
-                    {{ contact.phones.ipPhone }}
+                <md-button :title='defaultPhone'>
+                  <a class="md-display-2" :href="'tel:' + defaultPhone">
+                    {{ defaultPhone }}
                   </a>
                 </md-button>
                 <div class="md-flex"/>
@@ -134,8 +151,9 @@ const ContactCard = Vue.component('contact-card', {
               <md-card-content>
                 <p v-if="contact.title">Vínculo: <strong>{{ contact.title }}</strong></p>
                 <p v-if="contact.emails.mail">Mail: <strong>{{ contact.emails.mail }}</strong></p>
-                <p v-if="contact.phones.mobile">Celular: <strong>{{ contact.phones.mobile }}</strong></p>
-                <p v-if="contact.phones.facsimileTelephoneNumber">Fax: <strong>{{ contact.phones.facsimileTelephoneNumber }}</strong></p>
+                <p v-for="(phone, key) in contact.phones">
+                  {{ labels[key] }}: <strong>{{ phone }}</strong>
+                </p>
               </md-card-content>
               <md-card-actions>
                 <md-button v-if="contact.objectClass=='user'">

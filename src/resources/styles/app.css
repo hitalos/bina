@@ -11,6 +11,9 @@
   min-height: 264px;
   justify-content: space-between;
 }
+.back .md-card .md-card-content {
+  line-height: 12px;
+}
 .flip-container {
   perspective: 1000px;
 }
