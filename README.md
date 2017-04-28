@@ -24,6 +24,8 @@ After install, edit file `.env` and set variables.
 #### Start app
     npm start
 
+If you need, use a third parameter to provide a config file (`.env` renamed for alternative or testing environment). 
+
 ## With Docker
 
   Copy `.env-example` to `.env` and edit variables.
