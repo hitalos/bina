@@ -15,7 +15,7 @@ router.get('/all.json', (req, res) => {
 })
 
 router.get('/:contact.jpg', (req, res) => {
-  if (process.env.ENABLE_GRAVATAR) {
+  if (process.env.ENABLE_GRAVATAR === 'true') {
     ldapService((err, result) => {
       if (err) throw err
       const contact = result.filter(item => item.id === req.params.contact)[0]
