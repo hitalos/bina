@@ -60,7 +60,7 @@ const SearchField = Vue.component('search-field', {
 
 const CardList = Vue.component('card-list', {
   template:
-    `<md-layout md-flex>
+    `<md-layout md-flex class="card-list">
       <contact-card
         class="md-flex-xlarge-20 md-flex-large-33 md-flex-medium-50 md-flex-small-50 md-flex-xsmall-100"
         v-if="contact.show"
@@ -107,7 +107,7 @@ const ContactCard = Vue.component('contact-card', {
     },
   },
   template:
-    `<div class="flip-container">
+    `<div class="flip-container" ref="flip-container">
       <div class="flipper">
         <div class="front">
           <md-layout :class="contact.objectClass">
@@ -129,8 +129,12 @@ const ContactCard = Vue.component('contact-card', {
                 </md-card-media>
               </md-card-header>
               <md-card-content>
-                <p v-if="contact.department">Lotação: <strong>{{ contact.department }}
-                  <span v-if="contact.physicalDeliveryOfficeName"> - {{ contact.physicalDeliveryOfficeName }}</span></strong>
+                <p v-if="contact.department">Lotação:
+                  <strong>{{ contact.department }}
+                    <span v-if="contact.physicalDeliveryOfficeName">
+                    - {{ contact.physicalDeliveryOfficeName }}
+                    </span>
+                  </strong>
                 </p>
               </md-card-content>
               <md-card-actions>
@@ -149,8 +153,12 @@ const ContactCard = Vue.component('contact-card', {
           <md-layout :class="contact.objectClass">
             <md-card class="md-flex-100 md-with-hover">
               <md-card-content>
-                <p v-if="contact.title">Vínculo: <strong>{{ contact.title }}</strong></p>
-                <p v-if="contact.emails.mail">Mail: <strong>{{ contact.emails.mail }}</strong></p>
+                <p v-if="contact.title">
+                  Vínculo: <strong>{{ contact.title }}</strong>
+                </p>
+                <p v-if="contact.emails.mail">
+                  Mail: <strong>{{ contact.emails.mail }}</strong>
+                </p>
                 <p v-for="(phone, key) in contact.phones">
                   {{ labels[key] }}: <strong>{{ phone }}</strong>
                 </p>
@@ -168,15 +176,20 @@ const ContactCard = Vue.component('contact-card', {
       </div>
     </div>`,
   methods: {
-    invert(event) {
-      const el = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode
+    invert() {
+      const el = this.$refs['flip-container']
       if (el.classList) el.classList.add('reverse')
       else el.className += ' reverse'
     },
-    revert(event) {
-      const el = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode
+    revert() {
+      const el = this.$refs['flip-container']
       if (el.classList) el.classList.remove('reverse')
-      else el.className = el.className.replace(new RegExp(`(^|\\b)${className.split(' ').join('|')}(\\b|$)`, 'gi'), ' ')
+      else {
+        el.className = el.className.replace(
+          new RegExp(`(^|\\b)${className.split(' ').join('|')}(\\b|$)`, 'gi'),
+          ' '
+        )
+      }
     },
   },
 })
