@@ -5,12 +5,24 @@ const router = require('express').Router()
 const vCard = require('vcards-js')
 
 const ldapService = require('../ldapService')
+const formatters = require('../formatters')
 
 router.get('/all.json', (req, res) => {
   debug('Getting all contacts in json format')
   ldapService((err, result) => {
     if (err) throw err
     res.send(result)
+  })
+})
+
+router.get('/:brand.xml', (req, res) => {
+  debug(`Request contacts in '${req.params.brand}' format`)
+  ldapService((err, result) => {
+    if (err) throw err
+    const transform = formatters[req.params.brand]
+    const xml = transform(result)
+    res.set('Content-Type', 'text/xml')
+    res.send(xml.toString())
   })
 })
 
