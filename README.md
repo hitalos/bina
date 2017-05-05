@@ -44,3 +44,11 @@ or
 Before running app, set environment variable `DEBUG`:
 
     DEBUG=Bina:* npm start
+
+## Importing addressbook to voip phones
+
+Just config to sync with url: `http://<binaServer>/contacts/<brand>.xml`
+
+Brand options:
+* Yealink
+* Grandstream
