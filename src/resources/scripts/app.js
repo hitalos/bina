@@ -74,14 +74,13 @@ const CardList = Vue.component('card-list', {
   },
   created() {
     this.$http.get('/contacts/all.json').then((response) => {
-      this.contacts = response.body.map((contact) => {
-        contact.show = false
-        return contact
-      })
+      this.contacts = response.body.map(contact =>
+        Object.assign(contact, { show: false })
+      )
     })
     bus.$on('filter-changed', (searchTerms) => {
       this.contacts.forEach((contact) => {
-        contact.show = show(contact, searchTerms)
+        Object.assign(contact, { show: show(contact, searchTerms) })
       })
     })
   },

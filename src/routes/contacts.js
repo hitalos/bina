@@ -82,7 +82,10 @@ router.get('/:contact.vcf', (req, res) => {
         card.photo.mediaType = 'JPG'
         card.photo.base64 = true
         res.set('Content-Type', 'text/vcard')
-        res.set('Content-Disposition', `inline; filename="${contact.fullName}.vcf"`)
+        res.set(
+          'Content-Disposition',
+          `inline; filename="${contact.fullName}.vcf"`
+        )
         res.send(card.getFormattedString())
       })
     })

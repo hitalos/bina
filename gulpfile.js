@@ -16,7 +16,7 @@ gulp.task('scripts', ['clean-js'], () => {
   }
   return gulp.src([
     `node_modules/vue/dist/vue${min}.js`,
-    `node_modules/vue-material/dist/vue-material.js`,
+    'node_modules/vue-material/dist/vue-material.js',
     `node_modules/vue-resource/dist/vue-resource${min}.js`,
   ])
   .pipe(concat('vendors.js'))
