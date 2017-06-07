@@ -1,0 +1,11 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.7.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:moment:20161019':
+    - vcards-js > moment:
+        patched: '2017-06-07T18:19:51.834Z'
+  'npm:ms:20170412':
+    - compression > debug > ms:
+        patched: '2017-06-07T18:19:51.834Z'
