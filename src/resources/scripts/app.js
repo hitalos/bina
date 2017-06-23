@@ -70,6 +70,7 @@ const CardList = Vue.component('card-list', {
   },
   template:
     `<md-layout md-flex class="card-list">
+      <counters/>
       <contact-card
         class="md-flex-xlarge-20 md-flex-large-33 md-flex-medium-50 md-flex-small-50 md-flex-xsmall-100"
         v-for="contact in limitedList"
@@ -77,7 +78,26 @@ const CardList = Vue.component('card-list', {
         :contact="contact"
       />
     </md-layout>`,
+})
+
+const Counters = Vue.component('counters', {
+  computed: {
+    limitedList() {
+      return this.$store.getters.limitedList
+    },
+    count() {
+      return this.$store.getters.count
+    },
   },
+  template:
+    `<md-layout class="md-flex-100" v-if="count">
+      <p v-if="count >= limitedList.length">
+        Encontrado(s) {{ count }} contato(s).
+      </p>
+      <p v-if="count > limitedList.length">
+        Mostrando apenas os primeiros {{ limitedList.length }}.
+      </p>
+    </md-layout>`
 })
 
 const ContactCard = Vue.component('contact-card', {
@@ -240,6 +260,7 @@ new Vue({
     SearchField,
     CardList,
     ContactCard,
+    Counters,
   },
   beforeCreate() {
     this.$store.commit('populate')
