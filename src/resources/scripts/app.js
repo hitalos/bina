@@ -1,7 +1,6 @@
-/* eslint no-undef: 0, no-new: 0 */
-function removeAccents(str) {
-  let strWithoutAccents = str
-  const replaces = [
+/* eslint no-undef: 0, no-new: 0, no-param-reassign: 0 */
+const removeAccents = str =>
+  [
     { chr: 'a', regex: /[ÀÁÂÃÄȂàáâãäª]/ },
     { chr: 'e', regex: /[ÉÊËéêë]/ },
     { chr: 'i', regex: /[ÍÎÏíîï]/ },
@@ -9,15 +8,14 @@ function removeAccents(str) {
     { chr: 'u', regex: /[ÚÛÜúûü]/ },
     { chr: 'c', regex: /[ÇḈç]/ },
     { chr: 'n', regex: /[Ññ]/ }
-  ]
-  replaces.forEach((accent) => {
-    strWithoutAccents = strWithoutAccents.replace(accent.regex, accent.chr)
-  })
-  return strWithoutAccents
-}
+  ].reduce((acum, accent) =>
+    acum.replace(accent.regex, accent.chr),
+    str
+  )
 
-function show(contact, searchTerms) {
-  const terms = removeAccents(searchTerms).toLowerCase().trim()
+const show = (contact, searchTerms) => {
+  const terms = removeAccents(searchTerms).toLowerCase()
+    .trim()
     .replace(/\s\s+/g, ' ')
     .split(' ')
   const fullName = removeAccents(contact.fullName).toLowerCase()
@@ -25,7 +23,9 @@ function show(contact, searchTerms) {
 
   if (terms.every(str => fullName.indexOf(str) >= 0)) return true
   if (contact.department) {
-    const department = removeAccents(`${contact.department} ${contact.physicalDeliveryOfficeName || ''}`).toLowerCase()
+    const pdon = contact.physicalDeliveryOfficeName
+    const department = removeAccents(`${contact.department} ${pdon || ''}`)
+      .toLowerCase()
     if (terms.every(str => department.indexOf(str) >= 0)) return true
   }
   if (contact.title) {
@@ -132,7 +132,7 @@ const ContactCard = Vue.component('contact-card', {
               </md-card-content>
               <md-card-actions>
                 <md-button :title='defaultPhone'>
-                  <a class="md-display-2" :href="'tel:' + defaultPhone">
+                  <a class="md-display-1" :href="'tel:' + defaultPhone">
                     {{ defaultPhone }}
                   </a>
                 </md-button>
