@@ -25,22 +25,22 @@
     "ldapjs": "^1.0.1",
     "libxmljs": "^0.18.4",
     "pug": "^2.0.0-rc.2",
-    "vcards-js": "^2.4.1"
+    "vcards-js": "^2.6.0"
   },
   "devDependencies": {
     "axios": "^0.16.2",
     "babel-eslint": "^7.2.3",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.1",
-    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-import": "^2.5.0",
     "eslint-plugin-jsx-a11y": "^5.0.3",
-    "eslint-plugin-react": "^7.0.1",
+    "eslint-plugin-react": "^7.1.0",
     "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",
     "gulp-concat": "^2.6.1",
     "gulp-concat-css": "^2.3.0",
     "gulp-cssnano": "^2.1.2",
     "vue": "^2.3.3",
-    "vue-material": "^0.7.1",
+    "vue-material": "0.7.1",
   }
 }
