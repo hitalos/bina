@@ -36,53 +36,47 @@ function show(contact, searchTerms) {
   return terms.some(str => phones.some(phone => phone.indexOf(str) >= 0))
 }
 
-const bus = new Vue()
-
 const SearchField = Vue.component('search-field', {
-  data() {
-    return { searchTerms: '' }
+  computed: {
+    count() {
+      return this.$store.getters.count
+    },
+    total() {
+      return this.$store.getters.total
+    },
   },
   template:
     `<md-layout class="md-flex-20 md-flex-small-33 md-flex-xsmall-100">
       <md-input-container>
         <label>Busca</label>
-        <md-input tabindex="1" v-model="searchTerms" @change="filterChanged"/>
+        <md-input tabindex="1" @keyup.native="filterChanged"/>
       </md-input-container>
     </md-layout>`,
   methods: {
-    filterChanged(searchTerms) {
-      if (searchTerms.trim().length >= 3) {
-        bus.$emit('filter-changed', searchTerms)
+    filterChanged(e) {
+      const val = e.target.value.trim()
+      if (val.length >= 3) {
+        this.$store.commit('filterChanged', val)
       }
-    }
+    },
   },
 })
 
 const CardList = Vue.component('card-list', {
+  computed: {
+    limitedList() {
+      return this.$store.getters.limitedList
+    },
+  },
   template:
     `<md-layout md-flex class="card-list">
       <contact-card
         class="md-flex-xlarge-20 md-flex-large-33 md-flex-medium-50 md-flex-small-50 md-flex-xsmall-100"
-        v-if="contact.show"
-        v-for="contact in contacts"
+        v-for="contact in limitedList"
         :key="contact.fullName"
         :contact="contact"
       />
     </md-layout>`,
-  data() {
-    return { contacts: [] }
-  },
-  created() {
-    this.$http.get('/contacts/all.json').then((response) => {
-      this.contacts = response.body.map(contact =>
-        Object.assign(contact, { show: false })
-      )
-    })
-    bus.$on('filter-changed', (searchTerms) => {
-      this.contacts.forEach((contact) => {
-        Object.assign(contact, { show: show(contact, searchTerms) })
-      })
-    })
   },
 })
 
@@ -194,9 +188,44 @@ const ContactCard = Vue.component('contact-card', {
 })
 
 Vue.use(VueMaterial)
+const store = new Vuex.Store({
+  state: {
+    contacts: [],
+    searchTerms: ''
+  },
+  getters: {
+    total(state) {
+      return state.contacts.length
+    },
+    count(state) {
+      return state.contacts.filter(contact => contact.show).length
+    },
+    limitedList(state) {
+      return state.contacts
+        .filter(contact => contact.show)
+        .slice(0, 30)
+    },
+  },
+  mutations: {
+    populate(state) {
+      axios.get('/contacts/all.json').then((response) => {
+        state.contacts = response.data.map(contact =>
+          Object.assign(contact, { show: false })
+        )
+      })
+    },
+    filterChanged(state, searchTerms) {
+      state.searchTerms = searchTerms
+      state.contacts = state.contacts.map(contact =>
+        Object.assign(contact, { show: show(contact, searchTerms) })
+      )
+    },
+  },
+})
 new Vue({
   el: '#app',
   name: 'App',
+  store,
   template:
     `<div id="app" class="phone-viewport">
       <md-toolbar>
@@ -211,5 +240,8 @@ new Vue({
     SearchField,
     CardList,
     ContactCard,
+  },
+  beforeCreate() {
+    this.$store.commit('populate')
   },
 })
