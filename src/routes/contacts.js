@@ -1,4 +1,3 @@
-const crypto = require('crypto')
 const debug = require('debug')('Bina:Contacts')
 const http = require('http')
 const router = require('express').Router()

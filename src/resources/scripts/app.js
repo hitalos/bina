@@ -125,7 +125,8 @@ const ContactCard = Vue.component('contact-card', {
         <div class="front">
           <md-layout :class="contact.objectClass">
             <md-card class="md-flex-100 md-with-hover">
-              <md-card-header :title='"Vínculo: " + contact.title'>
+              <md-card-header
+                :title='contact.title ? "Vínculo: " + contact.title : ""'>
                 <md-card-header-text>
                   <div class="md-headline">{{ contact.fullName }}</div>
                 </md-card-header-text>
