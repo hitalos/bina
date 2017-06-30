@@ -29,7 +29,7 @@ module.exports = (req, res, next) => {
           res.end()
         })
       } else {
-        res.redirect('default.jpg')
+        res.redirect('/images/default.png')
       }
     })
   }
