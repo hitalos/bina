@@ -1,5 +1,5 @@
 FROM node:alpine
-MAINTAINER Hítalo Silva <hitalos@gmail.com>
+LABEL maintainer="Hítalo Silva <hitalos@gmail.com>"
 
 RUN apk update && apk upgrade
 
@@ -11,11 +11,10 @@ ENV DEV_LIBS 'g++ gcc libxml2-dev make python'
 
 RUN apk add $DEV_LIBS && \
   yarn && \
-  NODE_ENV=prod yarn run build && \
+  yarn run build && \
   rm -rf node_modules && \
   yarn --prod && \
-  apk del $DEV_LIBS && \
-  yarn clean && \
-  yarn cache clean
+  yarn cache clean && \
+  apk del $DEV_LIBS
 
 CMD npm start
