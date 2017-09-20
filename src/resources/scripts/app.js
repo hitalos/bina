@@ -174,7 +174,14 @@ const ContactCard = Vue.component('contact-card', {
                   Mail: <strong>{{ contact.emails.mail }}</strong>
                 </p>
                 <p v-for="(phone, key) in contact.phones">
-                  {{ labels[key] }}: <strong>{{ phone }}</strong>
+                   <span v-if="Array.isArray(phone)">
+                    <p v-for="num in phone">
+                      {{ labels[key] }}: <strong>{{ num }}</strong>
+                    </p>
+                  </span>
+                  <span v-else>
+                    {{ labels[key] }}: <strong>{{ phone }}</strong>
+                  </span>
                 </p>
               </md-card-content>
               <md-card-actions>
