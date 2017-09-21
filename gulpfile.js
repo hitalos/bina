@@ -8,7 +8,14 @@ const cssnano = require('gulp-cssnano')
 const env = process.env.NODE_ENV
 
 gulp.task('scripts', ['clean-js'], () => {
-  gulp.src(['src/resources/scripts/app.js'])
+  gulp.src([
+    'src/resources/scripts/removeAccents.js',
+    'src/resources/scripts/show.js',
+    'src/resources/scripts/components/*.js',
+    'src/resources/scripts/store.js',
+    'src/resources/scripts/app.js',
+  ])
+  .pipe(concat('app.js'))
   .pipe(gulp.dest('public/scripts'))
   let min = ''
   if (env === 'production' || env === 'prod') {
