@@ -1,0 +1,8 @@
+script#card-list-template(type="x-template")
+  md-layout.card-list(md-flex)
+    counters
+    contact-card.md-flex-xlarge-20.md-flex-large-33.md-flex-medium-50.md-flex-small-50.md-flex-xsmall-100(
+      v-for="contact in limitedList"
+      :key="contact.fullName"
+      :contact="contact"
+    )

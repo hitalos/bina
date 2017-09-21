@@ -45,13 +45,7 @@ const SearchField = Vue.component('search-field', {
       return this.$store.getters.total
     },
   },
-  template:
-    `<md-layout class="md-flex-20 md-flex-small-33 md-flex-xsmall-100">
-      <md-input-container>
-        <label>Busca</label>
-        <md-input tabindex="1" @keyup.native="filterChanged"/>
-      </md-input-container>
-    </md-layout>`,
+  template: '#search-field-template',
   methods: {
     filterChanged(e) {
       const val = e.target.value.trim()
@@ -68,16 +62,7 @@ const CardList = Vue.component('card-list', {
       return this.$store.getters.limitedList
     },
   },
-  template:
-    `<md-layout md-flex class="card-list">
-      <counters/>
-      <contact-card
-        class="md-flex-xlarge-20 md-flex-large-33 md-flex-medium-50 md-flex-small-50 md-flex-xsmall-100"
-        v-for="contact in limitedList"
-        :key="contact.fullName"
-        :contact="contact"
-      />
-    </md-layout>`,
+  template: '#card-list-template',
 })
 
 const Counters = Vue.component('counters', {
@@ -89,15 +74,7 @@ const Counters = Vue.component('counters', {
       return this.$store.getters.count
     },
   },
-  template:
-    `<md-layout class="md-flex-100" v-if="count">
-      <p v-if="count >= limitedList.length">
-        Encontrado(s) {{ count }} contato(s).
-      </p>
-      <p v-if="count > limitedList.length">
-        Mostrando apenas os primeiros {{ limitedList.length }}.
-      </p>
-    </md-layout>`
+  template: '#counters-template'
 })
 
 const ContactCard = Vue.component('contact-card', {
@@ -119,91 +96,17 @@ const ContactCard = Vue.component('contact-card', {
       return this.contact.phones[Object.keys(this.contact.phones)[0]]
     },
   },
-  template:
-    `<div class="flip-container" ref="flip-container">
-      <div class="flipper">
-        <div class="front">
-          <md-layout :class="contact.objectClass">
-            <md-card class="md-flex-100 md-with-hover">
-              <md-card-header
-                :title='contact.title ? "Vínculo: " + contact.title : ""'>
-                <md-card-header-text>
-                  <div class="md-headline">{{ contact.fullName }}</div>
-                </md-card-header-text>
-                <md-card-media>
-                  <img
-                    v-if="contact.id"
-                    :src="'/contacts/' + contact.id + '.jpg'"
-                    alt="Foto"
-                  />
-                  <img
-                    v-if="!contact.id"
-                    src="/images/logo.png"
-                  />
-                </md-card-media>
-              </md-card-header>
-              <md-card-content>
-                <p v-if="contact.department">Lotação:
-                  <strong>{{ contact.department }}
-                    <span v-if="contact.physicalDeliveryOfficeName">
-                    - {{ contact.physicalDeliveryOfficeName }}
-                    </span>
-                  </strong>
-                </p>
-              </md-card-content>
-              <md-card-actions>
-                <md-button :title='defaultPhone'>
-                  <a class="md-display-1" :href="'tel:' + defaultPhone">
-                    {{ defaultPhone }}
-                  </a>
-                </md-button>
-                <div class="md-flex"/>
-                <md-button @click.native='invert'>Ver mais detalhes</md-button>
-              </md-card-actions>
-            </md-card>
-          </md-layout>
-        </div>
-        <div class="back">
-          <md-layout :class="contact.objectClass">
-            <md-card class="md-flex-100 md-with-hover">
-              <md-card-content>
-                <p v-if="contact.title">
-                  Vínculo: <strong>{{ contact.title }}</strong>
-                </p>
-                <p v-if="contact.emails.mail">
-                  Mail: <strong>{{ contact.emails.mail }}</strong>
-                </p>
-                <p v-for="(phone, key) in contact.phones">
-                   <span v-if="Array.isArray(phone)">
-                    <p v-for="num in phone">
-                      {{ labels[key] }}: <strong>{{ num }}</strong>
-                    </p>
-                  </span>
-                  <span v-else>
-                    {{ labels[key] }}: <strong>{{ phone }}</strong>
-                  </span>
-                </p>
-              </md-card-content>
-              <md-card-actions>
-                <md-button v-if="contact.objectClass=='user'">
-                  <a :href="'/contacts/' + contact.id + '.vcf'">Baixar vCard</a>
-                </md-button>
-                <div class="md-flex"/>
-                <md-button @click.native="revert">voltar</md-button>
-              </md-card-actions>
-            </md-card>
-          </md-layout>
-        </div>
-      </div>
-    </div>`,
+  template: '#contact-card-template',
   methods: {
     invert() {
       const el = this.$refs['flip-container']
+      console.log('invert')
       if (el.classList) el.classList.add('reverse')
       else el.className += ' reverse'
     },
     revert() {
       const el = this.$refs['flip-container']
+      console.log('revert')
       if (el.classList) el.classList.remove('reverse')
       else {
         el.className = el.className.replace(
@@ -254,16 +157,7 @@ new Vue({
   el: '#app',
   name: 'App',
   store,
-  template:
-    `<div id="app" class="phone-viewport">
-      <md-toolbar>
-        <md-layout>
-          <h1 class="md-title">Bina</h1>
-        </md-layout>
-        <search-field/>
-      </md-toolbar>
-      <card-list/>
-    </div>`,
+  template: '#app-template',
   components: {
     SearchField,
     CardList,
