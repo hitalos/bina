@@ -7,9 +7,11 @@ script#contact-card-template(type="x-template")
             md-card-header(:title='contact.title ? "Vínculo: " + contact.title : ""')
               md-card-header-text
                 .md-headline {{ contact.fullName }}
-              md-card-media
-                img(v-if="contact.id" :src="'/contacts/' + contact.id + '.jpg'" alt="Foto")
-                img(v-if="!contact.id" src="/images/logo.png")
+              md-card-media(v-if="!contact.id")
+                img(src="/images/logo.png")
+              md-card-media(v-else)
+                img(v-if="contact.photo && contact.photo.type" :src="'data:'+ contact.photo.type +';base64,' + contact.photo.data" alt="Foto")
+                img(v-else :src="'/contacts/' + contact.id + '.jpg'" alt="Foto")
             md-card-content
               p(v-if="contact.department") Lotação: 
                 strong {{ contact.department }} 

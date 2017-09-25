@@ -7,13 +7,47 @@ const ldapService = require('../ldapService')
 const formatters = require('../formatters')
 const photosController = require('./photos')
 
-router.get('/all.json', (req, res) => {
+const all = (req, res) => {
   debug('Getting all contacts in json format')
   ldapService((err, result) => {
     if (err) throw err
     res.send(result)
   })
-})
+}
+
+const full = (req, res) => {
+  debug('Getting all contacts (with photo) in json format')
+  ldapService((err, result) => {
+    if (err) throw err
+    Promise.all(result.map(contact =>
+      new Promise((resolve, reject) => {
+        if (!contact.id) {
+          resolve(contact)
+          return
+        }
+        http.get(`${process.env.PHOTOS_URL}${contact.id}.jpg`, (response) => {
+          const rawData = []
+          response.on('data', (chunk) => { rawData.push(chunk) })
+          response.on('error', (error) => {
+            reject(error)
+          })
+          response.on('end', () => {
+            const type = response.headers['content-type']
+            const photo = {
+              type: type.indexOf('image') >= 0 ? type : null,
+              data: Buffer.concat(rawData).toString('base64'),
+            }
+            resolve({ ...contact, photo })
+          })
+        })
+      })
+    )).then((contacts) => {
+      res.send(contacts)
+    })
+  })
+}
+
+router.get('/all.json', process.env.FULL_JSON === 'true' ? full : all)
 
 router.get('/:brand.xml', (req, res) => {
   debug(`Request contacts in '${req.params.brand}' format`)
