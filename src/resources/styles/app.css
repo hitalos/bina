@@ -2,14 +2,11 @@
 @import '//fonts.googleapis.com/icon?family=Material+Icons';
 
 .md-toolbar {
-  position: fixed;
   width: 100%;
   top: 0;
   z-index: 1;
 }
-.card-list {
-  margin-top: 80px;
-}
+
 .md-layout.user {
   padding: 8px;
 }
