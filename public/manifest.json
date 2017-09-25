@@ -1,5 +1,6 @@
 {
   "name": "Bina",
+  "short_name": "Bina",
   "description": "A web App to search in a LDAP for users and contacts.",
   "theme_color": "#3f51b5",
   "background_color": "#3f51b5",

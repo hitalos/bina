@@ -17,6 +17,8 @@ gulp.task('scripts', ['clean-js'], () => {
   ])
   .pipe(concat('app.js'))
   .pipe(gulp.dest('public/scripts'))
+  gulp.src(['src/resources/scripts/pwabuilder-sw.js'])
+    .pipe(gulp.dest('public'))
   let min = ''
   if (env === 'production' || env === 'prod') {
     min = '.min'
