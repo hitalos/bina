@@ -17,4 +17,5 @@ RUN apk add $DEV_LIBS && \
   yarn cache clean && \
   apk del $DEV_LIBS
 
+EXPOSE 3000
 CMD npm start
