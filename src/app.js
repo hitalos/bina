@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 
 /* eslint no-unused-vars: 0 */
 app.use((error, req, res, next) => {
-  debug(error)
+  debug(`${req.url} - ${error}`)
   res.status(error.status || 500)
   if (app.get('env') === 'development') {
     res.render('error', { error })
