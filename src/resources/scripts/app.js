@@ -15,6 +15,11 @@ new Vue({
   beforeCreate() {
     this.$store.commit('populate')
   },
+  methods: {
+    searchFocus() {
+      document.querySelectorAll('.md-input')[0].focus()
+    },
+  },
 })
 
 if (window.location.protocol === 'https:' && !navigator.serviceWorker.controller) {

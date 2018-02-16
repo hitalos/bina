@@ -22,6 +22,12 @@ const store = new Vuex.Store({
       axios.get('/contacts/all.json').then((response) => {
         state.contacts = response.data.map(contact =>
           Object.assign(contact, { show: false }))
+      }).catch((err) => {
+        if (err.response.data.name === 'InvalidCredentialsError') {
+          /* eslint no-alert: 0 */
+          alert('Erro!\nCredenciais do usuário de sistema inválidas.\nContate um administrador do domínio!')
+        }
+        console.log(err.response.data)
       })
     },
     filterChanged(state, searchTerms) {

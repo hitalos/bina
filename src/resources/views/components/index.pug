@@ -5,7 +5,7 @@ include ./contact-card
 
 script#app-template(type="x-template")
   #app.phone-viewport
-    md-toolbar
+    md-toolbar(@click.native="searchFocus")
       md-layout
         h1.md-title Bina
       search-field

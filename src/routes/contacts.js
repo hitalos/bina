@@ -10,15 +10,21 @@ const photosController = require('./photos')
 const all = (req, res) => {
   debug('Getting all contacts in json format')
   ldapService((err, result) => {
-    if (err) throw err
-    res.send(result)
+    if (err) {
+      res.status(500).json({ name: err.name, msg: err.message })
+      return
+    }
+    res.json(result)
   })
 }
 
 const full = (req, res) => {
   debug('Getting all contacts (with photo) in json format')
   ldapService((err, result) => {
-    if (err) throw err
+    if (err) {
+      res.status(500).json({ name: err.name, msg: err.message })
+      return
+    }
     Promise.all(result.map(contact =>
       new Promise((resolve, reject) => {
         if (!contact.id) {
