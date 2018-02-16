@@ -6,7 +6,7 @@
     "start": "node bin/www",
     "build": "gulp",
     "copy-env": "gulp copy-env",
-    "lint": "eslint bin/www ./gulpfile.js public/pwabuilder-sw.js src/",
+    "lint": "eslint bin/www ./gulpfile.js src/",
     "test": "npm run lint --silent"
   },
   "keywords": [
@@ -28,13 +28,10 @@
     "vcards-js": "^2.6.0"
   },
   "devDependencies": {
-    "babel-eslint": "^7.2.3",
-    "eslint": "^3.19.0",
-    "eslint-config-airbnb": "^15.0.1",
-    "eslint-plugin-import": "^2.6.1",
-    "eslint-plugin-jsx-a11y": "^5.0.3",
-    "eslint-plugin-react": "^7.1.0",
     "axios": "^0.17.1",
+    "eslint": "^4.17.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
     "gulp": "^3.9.1",
     "gulp-clean": "^0.4.0",
     "gulp-concat": "^2.6.1",
