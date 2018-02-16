@@ -1,10 +1,13 @@
+const http = require('http')
 const router = require('express').Router()
 
 const contacts = require('./contacts')
 
 router.use('/contacts', contacts)
 router.get('/images/logo.png', (req, res) => {
-  res.redirect(process.env.LOGO_URL)
+  http.get(process.env.LOGO_URL, (response) => {
+    response.pipe(res)
+  })
 })
 
 module.exports = router
