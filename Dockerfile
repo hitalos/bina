@@ -11,7 +11,7 @@ ENV DEV_LIBS 'g++ gcc libxml2-dev make python'
 
 RUN apk add $DEV_LIBS && \
   yarn && \
-  yarn run build && \
+  NODE_ENV=prod yarn run build && \
   rm -rf node_modules && \
   yarn --prod && \
   yarn cache clean && \
