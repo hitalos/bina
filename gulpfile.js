@@ -15,8 +15,8 @@ gulp.task('scripts', ['clean-js'], () => {
     'src/resources/scripts/store.js',
     'src/resources/scripts/app.js',
   ])
-  .pipe(concat('app.js'))
-  .pipe(gulp.dest('public/scripts'))
+    .pipe(concat('app.js'))
+    .pipe(gulp.dest('public/scripts'))
   gulp.src(['src/resources/scripts/pwabuilder-sw.js'])
     .pipe(gulp.dest('public'))
   let min = ''
@@ -29,8 +29,8 @@ gulp.task('scripts', ['clean-js'], () => {
     `node_modules/vuex/dist/vuex${min}.js`,
     `node_modules/axios/dist/axios${min}.js`,
   ])
-  .pipe(concat('vendors.js'))
-  .pipe(gulp.dest('public/scripts'))
+    .pipe(concat('vendors.js'))
+    .pipe(gulp.dest('public/scripts'))
 })
 
 gulp.task('styles', ['clean-css'], () =>
@@ -38,10 +38,9 @@ gulp.task('styles', ['clean-css'], () =>
     'node_modules/vue-material/dist/vue-material.css',
     'src/resources/styles/app.css'
   ])
-  .pipe(concatCss('app.css'))
-  .pipe(cssnano())
-  .pipe(gulp.dest('public/styles'))
-)
+    .pipe(concatCss('app.css'))
+    .pipe(cssnano())
+    .pipe(gulp.dest('public/styles')))
 
 gulp.task('copy-env', () => {
   fs.stat('.env', (err) => {

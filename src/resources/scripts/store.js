@@ -1,4 +1,4 @@
-/* eslint no-undef: 0, no-new: 0, no-param-reassign: 0 */
+/* eslint no-unused-vars: 0, no-undef: 0, no-new: 0, no-param-reassign: 0 */
 const store = new Vuex.Store({
   state: {
     contacts: [],
@@ -21,15 +21,13 @@ const store = new Vuex.Store({
     populate(state) {
       axios.get('/contacts/all.json').then((response) => {
         state.contacts = response.data.map(contact =>
-          Object.assign(contact, { show: false })
-        )
+          Object.assign(contact, { show: false }))
       })
     },
     filterChanged(state, searchTerms) {
       state.searchTerms = searchTerms
       state.contacts = state.contacts.map(contact =>
-        Object.assign(contact, { show: show(contact, searchTerms) })
-      )
+        Object.assign(contact, { show: show(contact, searchTerms) }))
     },
   },
 })

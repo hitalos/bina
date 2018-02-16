@@ -1,3 +1,4 @@
+/* eslint no-unused-vars: 0 no-undef: 0 */
 const Counters = Vue.component('counters', {
   computed: {
     limitedList() {

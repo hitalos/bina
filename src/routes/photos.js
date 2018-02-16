@@ -1,3 +1,4 @@
+/* eslint no-unused-vars: 0 */
 const crypto = require('crypto')
 const debug = require('debug')('Bina:Photos')
 const http = require('http')

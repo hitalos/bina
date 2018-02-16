@@ -1,3 +1,4 @@
+/* eslint no-unused-vars: 0 no-undef: 0 */
 const show = (contact, searchTerms) => {
   const terms = removeAccents(searchTerms).toLowerCase()
     .trim()

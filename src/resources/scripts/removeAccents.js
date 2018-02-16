@@ -1,3 +1,4 @@
+/* eslint no-unused-vars: 0 */
 const removeAccents = str => [
   { chr: 'a', regex: /[ÀÁÂÃÄȂàáâãäª]/ },
   { chr: 'e', regex: /[ÉÊËéêë]/ },
@@ -7,6 +8,4 @@ const removeAccents = str => [
   { chr: 'c', regex: /[ÇḈç]/ },
   { chr: 'n', regex: /[Ññ]/ }
 ].reduce((acum, accent) =>
-  acum.replace(accent.regex, accent.chr),
-  str
-)
+  acum.replace(accent.regex, accent.chr), str)

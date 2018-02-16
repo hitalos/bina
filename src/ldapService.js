@@ -90,28 +90,22 @@ module.exports = (cb) => {
         contact.id = entry.object[idField]
         contact.fullName = entry.object[fullNameField]
         contact.phones = {}
-        phonesFields.forEach(
-          (phone) => {
-            if (entry.object[phone]) {
-              contact.phones[phone] = entry.object[phone]
-            }
+        phonesFields.forEach((phone) => {
+          if (entry.object[phone]) {
+            contact.phones[phone] = entry.object[phone]
           }
-        )
+        })
         contact.emails = {}
-        emailFields.forEach(
-          (email) => {
-            if (entry.object[email]) {
-              contact.emails[email] = entry.object[email]
-            }
+        emailFields.forEach((email) => {
+          if (entry.object[email]) {
+            contact.emails[email] = entry.object[email]
           }
-        )
-        otherFields.forEach(
-          (field) => {
-            if (entry.object[field]) {
-              contact[field] = entry.object[field]
-            }
+        })
+        otherFields.forEach((field) => {
+          if (entry.object[field]) {
+            contact[field] = entry.object[field]
           }
-        )
+        })
         if (entry.object.objectClass.some(oc => oc === 'user')) {
           contact.objectClass = 'user'
         } else {

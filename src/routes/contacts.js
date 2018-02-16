@@ -40,10 +40,10 @@ const full = (req, res) => {
             resolve({ ...contact, photo })
           })
         })
+      })))
+      .then((contacts) => {
+        res.send(contacts)
       })
-    )).then((contacts) => {
-      res.send(contacts)
-    })
   })
 }
 
