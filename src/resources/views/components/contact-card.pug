@@ -29,6 +29,8 @@ script#contact-card-template(type="x-template")
                 strong {{ contact.title }}
               p(v-if="contact.emails.mail") Mail: 
                 strong {{ contact.emails.mail }}
+              p(v-if="contact.employeeID") Matrícula: 
+                strong {{ contact.employeeID }}
               p(v-for="(phone, key) in contact.phones")
                 span(v-if="Array.isArray(phone)")
                   p(v-for="num in phone") {{ labels[key] }}: 
