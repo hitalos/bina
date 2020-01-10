@@ -1,6 +1,10 @@
+bina
+bina.exe
+bina_linux
+bina_macosx
+rice-box.go
 node_modules
+package-lock.json
 public/scripts
 public/styles
-public/pwabuilder-sw.js
 .env*
-*.log

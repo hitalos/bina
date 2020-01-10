@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+	<title>Bina</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	<link rel="stylesheet" href="/styles/bundle.css">
+	<link rel="manifest" href="/manifest.json">
+</head>
+
+<body>
+	<div id="app"></div>
+	<script id="search-field-template" type="x-template">
+		<md-layout class="md-flex-20 md-flex-small-33 md-flex-xsmall-100">
+			<md-input-container>
+				<label>Busca<md-input tabindex="1" @keyup.native="filterChanged"></md-input></label>
+			</md-input-container>
+		</md-layout>
+	</script>
+	<script id="card-list-template" type="x-template">
+		<md-layout class="card-list" md-flex>
+			<counters></counters>
+			<contact-card class="md-flex-xlarge-20 md-flex-large-33 md-flex-medium-50 md-flex-small-50 md-flex-xsmall-100" v-for="contact in limitedList" :key="contact.fullName" :contact="contact"></contact-card>
+			</md-layout>
+	</script>
+	<script id="counters-template" type="x-template">
+		<md-layout class="md-flex-100" v-if="count">
+			<p v-if="count &gt;= limitedList.length">Encontrado(s) {{ count }} contato(s).</p>
+			<p v-if="count &gt; limitedList.length">Mostrando apenas os primeiros {{ limitedList.length }}.</p>
+		</md-layout>
+	</script>
+	<script id="contact-card-template" type="x-template">
+		<div class="flip-container" ref="flip-container">
+			<div class="flipper">
+				<div class="front">
+					<md-layout :class="contact.objectClass">
+						<md-card class="md-flex-100 md-with-hover">
+							<md-card-header :title="contact.title ? &quot;Vínculo: &quot; + contact.title : &quot;&quot;">
+								<md-card-header-text>
+									<div class="md-headline">{{ contact.fullName }}</div>
+								</md-card-header-text>
+								<md-card-media v-if="!contact.id">
+									<img src="/images/logo.png">
+								</md-card-media>
+								<md-card-media v-else>
+									<img v-if="contact.photo &amp;&amp; contact.photo.type" :src="'data:'+ contact.photo.type +';base64,' + contact.photo.data" alt="Foto">
+									<img v-else :src="'/contacts/' + contact.id + '.jpg'" alt="Foto">
+								</md-card-media>
+							</md-card-header>
+							<md-card-content>
+								<p v-if="contact.department">Lotação: <strong>{{ contact.department }} <span v-if="contact.physicalDeliveryOfficeName">- {{ contact.physicalDeliveryOfficeName }}</span></strong></p>
+							</md-card-content>
+							<md-card-actions>
+								<md-button :title="defaultPhone">
+									<a class="md-display-1" :href="'tel:' + defaultPhone">{{ defaultPhone }}</a>
+								</md-button>
+								<div class="md-flex"></div>
+								<md-button @click.native="invert">Ver mais detalhes</md-button>
+							</md-card-actions>
+						</md-card>
+					</md-layout>
+				</div>
+				<div class="back">
+					<md-layout :class="contact.objectClass">
+						<md-card class="md-flex-100 md-with-hover">
+							<md-card-content>
+								<p v-if="contact.title">Vínculo: <strong>{{ contact.title }}</strong></p>
+								<p v-if="contact.emails.mail">Mail: <strong>{{ contact.emails.mail }}</strong></p>
+								<p v-if="contact.employeeID">Matrícula: <strong>{{ contact.employeeID }}</strong></p>
+								<p v-for="(phone, key) in contact.phones">
+									<span v-if="Array.isArray(phone)">
+										<p v-for="num in phone">{{ labels[key] }}: <strong>{{ num }}</strong></p>
+									</span>
+									<span v-else>{{ labels[key] }}: <strong>{{ phone }}</strong></span>
+								</p>
+							</md-card-content>
+							<md-card-actions>
+								<md-button v-if="contact.objectClass=='user'">
+									<a :href="'/contacts/' + contact.id + '.vcf'">Baixar vCard</a>
+								</md-button>
+								<div class="md-flex"></div>
+								<md-button @click.native="revert">voltar</md-button>
+							</md-card-actions>
+						</md-card>
+					</md-layout>
+				</div>
+			</div>
+		</div>
+	</script>
+	<script id="app-template" type="x-template">
+		<div class="phone-viewport" id="app">
+			<md-toolbar @click.native="searchFocus">
+				<md-layout>
+					<h1 class="md-title">Bina</h1>
+				</md-layout>
+				<search-field></search-field>
+			</md-toolbar>
+			<card-list></card-list>
+		</div>
+	</script>
+	<script src="/scripts/bundle.js"></script>
+	<noscript>Seu javascript está desativado!</noscript>
+</body>
+</html>

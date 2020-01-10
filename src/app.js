@@ -1,44 +1,40 @@
-const compression = require('compression')
-const debug = require('debug')('Bina:App')
-const express = require('express')
-const helmet = require('helmet')
-const path = require('path')
+import Vue from 'vue'
+import Vuex from 'vuex'
+import VueMaterial from 'vue-material'
 
-const routes = require('./routes')
+import CardList from './components/cardList'
+import ContactCard from './components/contactCard'
+import Counters from './components/counters'
+import SearchField from './components/searchField'
+import store from './store'
 
-process.on('uncaughtException', console.error)
+Vue.use(Vuex)
+Vue.use(VueMaterial)
 
-debug('Starting express…')
-const app = express()
-app.use(helmet())
-app.use(compression())
-
-app.set('view engine', 'pug')
-app.set('views', './src/resources/views')
-
-app.get('/', (req, res) => {
-  res.render('index')
+/* eslint no-new: 0 */
+new Vue({
+  el: '#app',
+  name: 'App',
+  store: store(Vuex),
+  template: '#app-template',
+  components: {
+    SearchField,
+    CardList,
+    ContactCard,
+    Counters,
+  },
+  beforeCreate() {
+    this.$store.commit('populate')
+  },
+  methods: {
+    searchFocus() {
+      document.querySelectorAll('.md-input')[0].focus()
+    },
+  },
 })
 
-app.use(express.static(path.join(__dirname, '/../public')))
-debug('Loading routes…')
-app.use(routes)
-
-app.use((req, res, next) => {
-  const error = new Error('Not Found')
-  error.status = 404
-  next(error)
-})
-
-/* eslint no-unused-vars: 0 */
-app.use((error, req, res, next) => {
-  debug(`${req.url} - ${error}`)
-  res.status(error.status || 500)
-  if (app.get('env') === 'development') {
-    res.render('error', { error })
-  } else {
-    res.render('error', { error: { message: error.message } })
-  }
-})
-
-module.exports = app
+if (window.location.protocol === 'https:' && !navigator.serviceWorker.controller) {
+  navigator.serviceWorker.register('pwabuilder-sw.js', {
+    scope: './'
+  })
+}
