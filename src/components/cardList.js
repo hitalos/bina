@@ -1,5 +1,6 @@
-/* eslint no-unused-vars: 0 no-undef: 0 */
-const CardList = Vue.component('card-list', {
+import Vue from 'vue'
+
+export default Vue.component('card-list', {
   computed: {
     limitedList() {
       return this.$store.getters.limitedList

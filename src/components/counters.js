@@ -1,5 +1,6 @@
-/* eslint no-unused-vars: 0 no-undef: 0 */
-const Counters = Vue.component('counters', {
+import Vue from 'vue'
+
+export default Vue.component('counters', {
   computed: {
     limitedList() {
       return this.$store.getters.limitedList

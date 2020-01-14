@@ -1,5 +1,6 @@
-/* eslint no-unused-vars: 0 no-undef: 0 */
-const SearchField = Vue.component('search-field', {
+import Vue from 'vue'
+
+export default Vue.component('search-field', {
   computed: {
     count() {
       return this.$store.getters.count
