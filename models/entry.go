@@ -19,7 +19,7 @@ type Entry struct {
 	Emails                     map[string]string `json:"emails,omitempty"`
 	Department                 string            `json:"department,omitempty"`
 	Title                      string            `json:"title,omitempty"`
-	EmployeeID                 string            `json:"employeeId,omitempty"`
+	EmployeeID                 string            `json:"employeeID,omitempty"`
 	PhysicalDeliveryOfficeName string            `json:"physicalDeliveryOfficeName,omitempty"`
 	ObjectClass                string            `json:"objectClass,omitempty"`
 	Photo                      string            `json:"photo,omitempty"`
