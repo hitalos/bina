@@ -57,11 +57,11 @@ func GetContacts(w http.ResponseWriter, r *http.Request) {
 
 	list, err := models.GetContacts()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		errHandler(w, err)
 		return
 	}
 	if contactsJSON, err = json.Marshal(list); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		errHandler(w, err)
 		return
 	}
 	lastCached = time.Now()

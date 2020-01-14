@@ -44,12 +44,12 @@ func GetCard(w http.ResponseWriter, r *http.Request) {
 	contact := chi.URLParam(r, "contact")
 	entry := models.Entry{}
 	if err := entry.GetByAccount(contact); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		errHandler(w, err)
 		return
 	}
 
 	if err := entry.AttachPhoto(os.Getenv("PHOTOS_URL") + entry.ID + ".jpg"); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		errHandler(w, err)
 		return
 	}
 
@@ -65,6 +65,6 @@ func GetCard(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/vcard; charset=utf-8")
 	w.Header().Set("Content-Disposition", "inline; filename=\""+entry.FullName+".vcf\"")
 	if err := tmpl.Execute(w, data); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		errHandler(w, err)
 	}
 }

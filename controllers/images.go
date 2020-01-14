@@ -34,13 +34,13 @@ func GetLogo(w http.ResponseWriter, r *http.Request) {
 	var err error
 	if len(logoBuf) == 0 {
 		if logoBuf, err = loadFromURL(os.Getenv("LOGO_URL")); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			errHandler(w, err)
 			return
 		}
 	}
 	w.Header().Set("Content-Type", "image/png")
 	if _, err = w.Write(logoBuf); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		errHandler(w, err)
 	}
 }
 
@@ -49,7 +49,7 @@ func GetPhoto(w http.ResponseWriter, r *http.Request) {
 	contact := chi.URLParam(r, "contact")
 	entry := models.Entry{}
 	if err := entry.GetByAccount(contact); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		errHandler(w, err)
 		return
 	}
 	if os.Getenv("ENABLE_GRAVATAR") == "true" && entry.Emails["mail"] != "" {
@@ -60,12 +60,12 @@ func GetPhoto(w http.ResponseWriter, r *http.Request) {
 	}
 	photoBuf, err := loadFromURL(os.Getenv("PHOTOS_URL") + entry.ID + ".jpg")
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		errHandler(w, err)
 		return
 	}
 
 	w.Header().Set("Content-Type", "image/jpeg")
 	if _, err = w.Write(photoBuf); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		errHandler(w, err)
 	}
 }
