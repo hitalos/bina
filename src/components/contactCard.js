@@ -16,7 +16,17 @@ export default Vue.component('contact-card', {
   },
   computed: {
     defaultPhone() {
-      return this.contact.phones[Object.keys(this.contact.phones)[0]]
+      const opts = [
+        'ipPhone',
+        'telephoneNumber',
+        'facsimileTelephoneNumber',
+        'mobile',
+        'homePhone',
+        'otherTelephone',
+      ]
+      const phones = Object.keys(this.contact.phones)
+      const defaultPhone = opts.filter((label) => phones.indexOf(label) !== -1)[0]
+      return this.contact.phones[defaultPhone]
     },
   },
   template: '#contact-card-template',
@@ -31,7 +41,7 @@ export default Vue.component('contact-card', {
       if (el.classList) el.classList.remove('reverse')
       else {
         el.className = el.className.replace(
-          new RegExp(`(^|\\b)${className.split(' ').join('|')}(\\b|$)`, 'gi'),
+          new RegExp(`(^|\\b)${el.className.split(' ').join('|')}(\\b|$)`, 'gi'),
           ' '
         )
       }
