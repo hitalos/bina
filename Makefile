@@ -10,10 +10,13 @@ build_windows:
 build_macosx:
 	CGO_ENABLED=0 GOOS=darwin go build -ldflags '-s -w' -trimpath -o bina_macosx ./cmd
 
+build_android:
+	GOOS=linux GOARCH=arm GOARM=7 go build -o bina_android ./cmd
+
 all: go_generate build_linux build_windows build_macosx
 
 go_generate: build_public
-	rice -i ./cmd embed-go
+	${GOPATH}/bin/rice -i ./cmd embed-go
 
 build_public: install_deps
 	mkdir -p public/styles public/scripts

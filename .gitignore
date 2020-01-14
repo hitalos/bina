@@ -1,7 +1,4 @@
-bina
-bina.exe
-bina_linux
-bina_macosx
+bina*
 rice-box.go
 node_modules
 package-lock.json
