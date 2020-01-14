@@ -18,9 +18,13 @@ all: go_generate build_linux build_windows build_macosx
 go_generate: build_public
 	${GOPATH}/bin/rice -i ./cmd embed-go
 
+lint:
+	go get -u golang.org/x/lint/golint
+	${GOPATH}/bin/golint
+
 build_public: install_deps
 	mkdir -p public/styles public/scripts
-	npm run build
+	npm test && npm run build
 	cat node_modules/vue-material/dist/vue-material.css > public/styles/bundle.css
 	echo >> public/styles/bundle.css
 	cat src/app.css >> public/styles/bundle.css
