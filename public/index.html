@@ -67,7 +67,9 @@
 						<md-card class="md-flex-100 md-with-hover">
 							<md-card-content>
 								<p v-if="contact.title">Vínculo: <strong>{{ contact.title }}</strong></p>
-								<p v-if="contact.emails.mail">Mail: <strong>{{ contact.emails.mail }}</strong></p>
+								<div v-if="contact.emails">
+									<p v-for="(email, key) in contact.emails" title="{{key}}">Mail: <strong>{{ email }}</strong></p>
+								</div>
 								<p v-if="contact.employeeID">Matrícula: <strong>{{ contact.employeeID }}</strong></p>
 								<p v-for="(phone, key) in contact.phones">
 									<span v-if="Array.isArray(phone)">
