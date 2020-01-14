@@ -47,6 +47,9 @@ func GetContacts() (*ldap.SearchResult, error) {
 		"(|(objectClass=user)(objectClass=contact)))"
 
 	ldapConn, err := ldap.DialURL("ldap://" + host + ":389")
+	if err != nil {
+		return nil, err
+	}
 	if err = ldapConn.Bind(user, pass); err != nil {
 		return nil, err
 	}
