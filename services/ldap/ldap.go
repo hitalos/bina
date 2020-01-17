@@ -50,6 +50,7 @@ func GetContacts() (*ldap.SearchResult, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer ldapConn.Close()
 	if err = ldapConn.Bind(user, pass); err != nil {
 		return nil, err
 	}
