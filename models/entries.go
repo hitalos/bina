@@ -2,6 +2,7 @@ package models
 
 import (
 	"sort"
+	"sync"
 	"unicode"
 
 	"github.com/hitalos/bina/services/ldap"
@@ -9,6 +10,8 @@ import (
 	"golang.org/x/text/transform"
 	"golang.org/x/text/unicode/norm"
 )
+
+var mutex sync.Mutex
 
 // Entries slice of Entry
 type Entries []Entry
@@ -41,11 +44,13 @@ func GetContacts() (Entries, error) {
 		return nil, err
 	}
 	var entry Entry
+	mutex.Lock()
 	contacts = make(Entries, len(result.Entries))
 	for i, e := range result.Entries {
 		entry.LoadFromLDAPEntry(e)
 		contacts[i] = entry
 	}
 	sort.Sort(&contacts)
+	mutex.Unlock()
 	return contacts, nil
 }

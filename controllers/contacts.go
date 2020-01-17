@@ -11,13 +11,15 @@ import (
 	"github.com/hitalos/bina/models"
 )
 
+var (
+	cacheDuration int
+	contactsJSON  []byte
+	lastCached    time.Time
+)
+
 func validCache() bool {
 	return lastCached.Add(time.Duration(cacheDuration)*time.Second).Unix() > time.Now().Unix()
 }
-
-var cacheDuration int
-var contactsJSON []byte
-var lastCached time.Time
 
 func init() {
 	list, err := models.GetContacts()
