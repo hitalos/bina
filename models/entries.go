@@ -5,10 +5,11 @@ import (
 	"sync"
 	"unicode"
 
-	"github.com/hitalos/bina/services/ldap"
-
 	"golang.org/x/text/transform"
 	"golang.org/x/text/unicode/norm"
+
+	"github.com/hitalos/bina/config"
+	"github.com/hitalos/bina/services/ldap"
 )
 
 var mutex sync.Mutex
@@ -38,19 +39,22 @@ func (e *Entries) Swap(i, j int) {
 var contacts Entries
 
 // GetContacts returns a list of all Entry
-func GetContacts() (Entries, error) {
-	result, err := ldap.GetContacts()
-	if err != nil {
-		return nil, err
-	}
-	var entry Entry
+func GetContacts(providers []config.Provider) (Entries, error) {
 	mutex.Lock()
-	contacts = make(Entries, len(result.Entries))
-	for i, e := range result.Entries {
-		entry.LoadFromLDAPEntry(e)
-		contacts[i] = entry
+	contacts = Entries{}
+	e := Entry{}
+	for _, provider := range providers {
+		entries, err := ldap.GetContacts(provider)
+		if err != nil {
+			return nil, err
+		}
+		for _, ldapEntry := range entries {
+			e.LoadFromLDAPEntry(ldapEntry, provider)
+			contacts = append(contacts, e)
+		}
 	}
 	sort.Sort(&contacts)
 	mutex.Unlock()
+
 	return contacts, nil
 }

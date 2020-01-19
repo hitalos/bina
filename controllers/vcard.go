@@ -9,12 +9,12 @@ import (
 
 	"github.com/go-chi/chi"
 
+	"github.com/hitalos/bina/config"
 	"github.com/hitalos/bina/models"
 )
 
-var tmpl *template.Template
-
-func init() {
+// GetCard handle request to vCard files
+func GetCard(c *config.Config) http.HandlerFunc {
 	cardTemplate := `BEGIN:VCARD
 VERSION:3.0
 FN;CHARSET=UTF-8:{{ .Contact.FullName }}
@@ -31,40 +31,37 @@ NOTE;CHARSET=UTF-8:{{ .Contact.Department }} - {{ .Contact.PhysicalDeliveryOffic
 SOURCE;CHARSET=UTF-8:http://{{ .Host }}/contacts/{{ .Contact.ID }}.vcf
 REV:{{ .Created }}
 END:VCARD`
-	var err error
-	tmpl, err = template.New("vcard").Parse(cardTemplate)
+
+	tmpl, err := template.New("vcard").Parse(cardTemplate)
 	if err != nil {
-		log.Println(err)
-		os.Exit(1)
+		log.Fatalln(err)
 	}
-}
+	return func(w http.ResponseWriter, r *http.Request) {
+		contact := chi.URLParam(r, "contact")
+		entry := models.Entry{}
+		if err := entry.GetByAccount(contact); err != nil {
+			errHandler(w, err)
+			return
+		}
 
-// GetCard handle request to vCard files
-func GetCard(w http.ResponseWriter, r *http.Request) {
-	contact := chi.URLParam(r, "contact")
-	entry := models.Entry{}
-	if err := entry.GetByAccount(contact); err != nil {
-		errHandler(w, err)
-		return
-	}
+		if err := entry.AttachPhoto(os.Getenv("PHOTOS_URL") + entry.ID + ".jpg"); err != nil {
+			errHandler(w, err)
+			return
+		}
 
-	if err := entry.AttachPhoto(os.Getenv("PHOTOS_URL") + entry.ID + ".jpg"); err != nil {
-		errHandler(w, err)
-		return
-	}
-
-	created := time.Now().In(time.UTC).Format(time.RFC3339)
-	data := struct {
-		Contact models.Entry
-		Host    string
-		Created string
-	}{
-		entry,
-		r.Host,
-		created}
-	w.Header().Set("Content-Type", "text/vcard; charset=utf-8")
-	w.Header().Set("Content-Disposition", "inline; filename=\""+entry.FullName+".vcf\"")
-	if err := tmpl.Execute(w, data); err != nil {
-		errHandler(w, err)
+		created := time.Now().In(time.UTC).Format(time.RFC3339)
+		data := struct {
+			Contact models.Entry
+			Host    string
+			Created string
+		}{
+			entry,
+			r.Host,
+			created}
+		w.Header().Set("Content-Type", "text/vcard; charset=utf-8")
+		w.Header().Set("Content-Disposition", "inline; filename=\""+entry.FullName+".vcf\"")
+		if err := tmpl.Execute(w, data); err != nil {
+			errHandler(w, err)
+		}
 	}
 }

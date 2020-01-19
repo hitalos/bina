@@ -5,24 +5,22 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/go-ldap/ldap/v3"
+
+	"github.com/hitalos/bina/config"
 )
 
 // Entry struct of contact
 type Entry struct {
-	ID                         string            `json:"id,omitempty"`
-	FullName                   string            `json:"fullName,omitempty"`
-	Phones                     map[string]string `json:"phones,omitempty"`
-	Emails                     map[string]string `json:"emails,omitempty"`
-	Department                 string            `json:"department,omitempty"`
-	Title                      string            `json:"title,omitempty"`
-	EmployeeID                 string            `json:"employeeID,omitempty"`
-	PhysicalDeliveryOfficeName string            `json:"physicalDeliveryOfficeName,omitempty"`
-	ObjectClass                string            `json:"objectClass,omitempty"`
-	Photo                      string            `json:"photo,omitempty"`
+	ID          string            `json:"id,omitempty"`
+	FullName    string            `json:"fullName,omitempty"`
+	ObjectClass string            `json:"objectClass,omitempty"`
+	Phones      map[string]string `json:"phones,omitempty"`
+	Emails      map[string]string `json:"emails,omitempty"`
+	Others      map[string]string `json:"others,omitempty"`
+	Photo       string            `json:"photo,omitempty"`
 }
 
 // FirstName returns the first name of contact
@@ -65,25 +63,22 @@ func (e *Entry) GetByAccount(account string) error {
 	return errors.New("not found")
 }
 
+func makeMap(e *ldap.Entry, fields []string) map[string]string {
+	list := make(map[string]string, len(fields))
+	for _, field := range fields {
+		if e.GetAttributeValue(field) != "" {
+			list[field] = e.GetAttributeValue(field)
+		}
+	}
+	return list
+}
+
 // LoadFromLDAPEntry convert LDAP type to this Entry struct
-func (e *Entry) LoadFromLDAPEntry(entry *ldap.Entry) {
+func (e *Entry) LoadFromLDAPEntry(entry *ldap.Entry, p config.Provider) {
 	e.ID = entry.GetAttributeValue("sAMAccountName")
 	e.FullName = entry.GetAttributeValue("displayName")
-	e.Department = entry.GetAttributeValue("department")
-	e.Title = entry.GetAttributeValue("title")
-	e.EmployeeID = entry.GetAttributeValue("employeeID")
-	e.PhysicalDeliveryOfficeName = entry.GetAttributeValue("physicalDeliveryOfficeName")
 	e.ObjectClass = entry.GetAttributeValues("objectClass")[3]
-	e.Emails = make(map[string]string)
-	for _, emailField := range strings.Split(os.Getenv("EMAIL_FIELDS"), ",") {
-		if entry.GetAttributeValue(emailField) != "" {
-			e.Emails[emailField] = entry.GetAttributeValue(emailField)
-		}
-	}
-	e.Phones = make(map[string]string)
-	for _, f := range strings.Split(os.Getenv("PHONE_FIELDS"), ",") {
-		if entry.GetAttributeValue(f) != "" {
-			e.Phones[f] = entry.GetAttributeValue(f)
-		}
-	}
+	e.Emails = makeMap(entry, p.Fields.Emails)
+	e.Phones = makeMap(entry, p.Fields.Phones)
+	e.Others = makeMap(entry, p.Fields.Others)
 }

@@ -4,19 +4,18 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strconv"
 
 	rice "github.com/GeertJohan/go.rice"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/joho/godotenv"
 	apm "go.elastic.co/apm/module/apmchi"
 
+	"github.com/hitalos/bina/config"
 	"github.com/hitalos/bina/controllers"
 )
 
 func main() {
-	godotenv.Load()
+	c := config.Load()
 	r := chi.NewRouter()
 	r.Use(middleware.RealIP, apm.Middleware(), middleware.DefaultCompress)
 	if os.Getenv("DEBUG") == "1" {
@@ -24,18 +23,14 @@ func main() {
 	}
 
 	r.Route("/contacts", func(r chi.Router) {
-		r.Get("/all.json", controllers.GetContacts)
-		r.Get("/{contact:[a-z]+}.vcf", controllers.GetCard)
-		r.Get("/{contact:[a-z]+}.jpg", controllers.GetPhoto)
+		r.Get("/all.json", controllers.GetContacts(c))
+		r.Get("/{contact:[a-z]+}.vcf", controllers.GetCard(c))
+		r.Get("/{contact:[a-z]+}.jpg", controllers.GetPhoto(c))
 	})
-	r.Get("/images/logo.png", controllers.GetLogo)
+	r.Get("/images/logo.png", controllers.GetLogo(c.LogoURL))
 
 	r.Handle("/*", http.FileServer(rice.MustFindBox("../public").HTTPBox()))
 
-	port := os.Getenv("PORT")
-	if _, err := strconv.Atoi(port); err != nil {
-		port = "8000"
-	}
-	fmt.Println("Listening on port", port)
-	fmt.Println(http.ListenAndServe(":"+port, r))
+	fmt.Printf("Listening on port :%d\n", c.Port)
+	fmt.Println(http.ListenAndServe(fmt.Sprintf(":%d", c.Port), r))
 }
