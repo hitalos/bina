@@ -4,7 +4,7 @@ A web App to search in a LDAP for users and contacts.
 
 ## Requirements
 
-* A LDAP server like Active Directory
+* One or many LDAP servers like Active Directory
 
 ## Installing
 
@@ -12,7 +12,7 @@ A web App to search in a LDAP for users and contacts.
 
 ## Configuring
 
-After install, edit an `.env` file and set the environment variables (like the example).
+After install, edit an `config.yml` file and set variables (like the [example](config_example.yml)).
 
 ## Debugging
 

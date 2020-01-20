@@ -1,0 +1,31 @@
+cacheDuration: 300
+enableGravatar: true
+photosURL: http://domain.com/photos/
+logoURL: http://domain.com/images/logo.png
+
+providers:
+  - type: ldap
+    params:
+      host: 192.168.0.1
+      base: dc=domain,dc=com
+      user: bina@domain.com
+      pass: "123456"
+      timeout: 5
+    fields:
+      identifier: sAMAccountName
+      fullName: displayName
+      phones:
+        - ipPhone
+        - telephoneNumber
+        - mobile
+        - homePhone
+        - otherTelephone
+        - facsimileTelephoneNumber
+      emails:
+        - mail
+        - proxyAddresses
+      others:
+        - department
+        - title
+        - employeeID
+        - physicalDeliveryOfficeName
