@@ -2,6 +2,10 @@ package ldap
 
 import (
 	"fmt"
+	"log"
+	"os"
+	"strconv"
+	"time"
 
 	"github.com/go-ldap/ldap/v3"
 
@@ -27,6 +31,13 @@ func GetContacts(p config.Provider) ([]*ldap.Entry, error) {
 		"(objectCategory=person)" +
 		"(!(UserAccountControl:1.2.840.113556.1.4.803:=2))" +
 		"(|(objectClass=user)(objectClass=contact)))"
+
+	if ldapTimeout, err := strconv.Atoi(p.Params["timeout"]); err == nil && ldapTimeout > 0 {
+		ldap.DefaultTimeout = time.Duration(ldapTimeout) * time.Second
+	}
+	if os.Getenv("DEBUG") == "1" {
+		log.Println("timeout set to:", ldap.DefaultTimeout)
+	}
 
 	ldapConn, err := ldap.DialURL("ldap://" + p.Params["host"] + ":389")
 	if err != nil {
