@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"net/http"
 	"os"
@@ -15,7 +16,9 @@ import (
 )
 
 func main() {
-	c := config.Load()
+	configFilepath := flag.String("c", "config.yml", "Path of config file")
+	flag.Parse()
+	c := config.Load(*configFilepath)
 	r := chi.NewRouter()
 	r.Use(middleware.RealIP, apm.Middleware(), middleware.DefaultCompress)
 	if os.Getenv("DEBUG") == "1" {

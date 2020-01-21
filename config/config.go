@@ -1,7 +1,7 @@
 package config
 
 import (
-	"log"
+	"fmt"
 	"os"
 
 	"gopkg.in/yaml.v2"
@@ -43,17 +43,21 @@ func (c *Config) setDefaultsOnEmpty() {
 }
 
 // Load loads the configuration from file sistem
-func Load() *Config {
+func Load(configFilepath string) *Config {
 	c := new(Config)
-	f, err := os.Open("config.yml")
+	f, err := os.Open(configFilepath)
 	if err != nil {
 		if os.IsNotExist(err) {
-			log.Fatalln("Crie um arquivo 'config.yml' no formato do exemplo do projeto")
+			fmt.Printf("Crie um arquivo %q no formato do exemplo do projeto\n", configFilepath)
+			os.Exit(1)
 		}
-		log.Fatalln(err)
+		fmt.Println(err)
 	}
 	defer f.Close()
-	yaml.NewDecoder(f).Decode(c)
+	if err = yaml.NewDecoder(f).Decode(c); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 
 	c.setDefaultsOnEmpty()
 	return c
