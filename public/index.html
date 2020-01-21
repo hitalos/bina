@@ -37,7 +37,7 @@
 				<div class="front">
 					<md-layout :class="contact.objectClass">
 						<md-card class="md-flex-100 md-with-hover">
-							<md-card-header :title="contact.others.title ? &quot;Vínculo: &quot; + contact.others.title : &quot;&quot;">
+							<md-card-header :title="contact.others && contact.others.title ? &quot;Vínculo: &quot; + contact.others.title : &quot;&quot;">
 								<md-card-header-text>
 									<div class="md-headline">{{ contact.fullName }}</div>
 								</md-card-header-text>
@@ -50,7 +50,7 @@
 								</md-card-media>
 							</md-card-header>
 							<md-card-content>
-								<p v-if="contact.others.department">Lotação: <strong>{{ contact.others.department }} <span v-if="contact.others.physicalDeliveryOfficeName">- {{ contact.others.physicalDeliveryOfficeName }}</span></strong></p>
+								<p v-if="contact.others && contact.others.department">Lotação: <strong>{{ contact.others.department }} <span v-if="contact.others && contact.others.physicalDeliveryOfficeName">- {{ contact.others.physicalDeliveryOfficeName }}</span></strong></p>
 							</md-card-content>
 							<md-card-actions>
 								<md-button :title="defaultPhone">
@@ -66,11 +66,11 @@
 					<md-layout :class="contact.objectClass">
 						<md-card class="md-flex-100 md-with-hover">
 							<md-card-content>
-								<p v-if="contact.others.title">Vínculo: <strong>{{ contact.others.title }}</strong></p>
+								<p v-if="contact.others && contact.others.title">Vínculo: <strong>{{ contact.others.title }}</strong></p>
 								<div v-if="contact.emails">
 									<p v-for="(email, key) in contact.emails" title="{{key}}">Mail: <strong>{{ email }}</strong></p>
 								</div>
-								<p v-if="contact.others.employeeID">Matrícula: <strong>{{ contact.others.employeeID }}</strong></p>
+								<p v-if="contact.others && contact.others.employeeID">Matrícula: <strong>{{ contact.others.employeeID }}</strong></p>
 								<p v-for="(phone, key) in contact.phones">
 									<span v-if="Array.isArray(phone)">
 										<p v-for="num in phone">{{ labels[key] }}: <strong>{{ num }}</strong></p>
