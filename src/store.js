@@ -19,15 +19,17 @@ const show = (contact, searchTerms) => {
   const phones = Object.keys(contact.phones).map((key) => contact.phones[key])
 
   if (terms.every((str) => fullName.indexOf(str) >= 0)) return true
-  if (contact.department) {
-    const pdon = contact.physicalDeliveryOfficeName
-    const department = removeAccents(`${contact.department} ${pdon || ''}`)
-      .toLowerCase()
-    if (terms.every((str) => department.indexOf(str) >= 0)) return true
-  }
-  if (contact.title) {
-    const title = removeAccents(contact.title).toLowerCase()
-    if (terms.every((str) => title.indexOf(str) >= 0)) return true
+  if (contact.others) {
+    if (contact.others.department) {
+      const pdon = contact.others.physicalDeliveryOfficeName
+      const department = removeAccents(`${contact.others.department} ${pdon || ''}`)
+        .toLowerCase()
+      if (terms.every((str) => department.indexOf(str) >= 0)) return true
+    }
+    if (contact.others.title) {
+      const title = removeAccents(contact.others.title).toLowerCase()
+      if (terms.every((str) => title.indexOf(str) >= 0)) return true
+    }
   }
 
   return terms.some((str) => phones.some((phone) => phone.indexOf(str) >= 0))
