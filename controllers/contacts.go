@@ -46,7 +46,7 @@ func GetContacts(c *config.Config) http.HandlerFunc {
 				return
 			}
 		}
-		w.Header().Set("Content-Type", "aplication/json; charset=utf-8")
+		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Last-Modified", lastCached.Format(time.RFC1123))
 		w.Header().Set("Cache-Control", fmt.Sprintf("max-age=%d", c.CacheDuration))
 		if validCache(c.CacheDuration) {
