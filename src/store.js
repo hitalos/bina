@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 const removeAccents = (str) => [
   { chr: 'a', regex: /[ÀÁÂÃÄȂàáâãäª]/ },
   { chr: 'e', regex: /[ÉÊËéêë]/ },
@@ -56,8 +54,8 @@ export default (Vuex) => new Vuex.Store({
   mutations: {
     /* eslint no-param-reassign: 0, no-alert: 0 */
     populate(state) {
-      axios.get('/contacts/all.json').then((response) => {
-        state.contacts = response.data.map((contact) => Object.assign(contact, { show: false }))
+      fetch('/contacts/all.json').then((response) => response.json()).then((data) => {
+        state.contacts = data.map((contact) => Object.assign(contact, { show: false }))
       }).catch((err) => {
         if (err.response.data.name === 'InvalidCredentialsError') {
           alert('Erro!\nCredenciais do usuário de sistema inválidas.\nContate um administrador do domínio!')
