@@ -20,7 +20,7 @@ func main() {
 	flag.Parse()
 	c := config.Load(*configFilepath)
 	r := chi.NewRouter()
-	r.Use(middleware.RealIP, apm.Middleware(), middleware.DefaultCompress)
+	r.Use(middleware.RealIP, apm.Middleware(), middleware.Compress(6))
 	if os.Getenv("DEBUG") == "1" {
 		r.Use(middleware.Logger)
 	}
