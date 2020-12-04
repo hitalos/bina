@@ -1,4 +1,4 @@
-FROM node:13-alpine as frontend-builder
+FROM node:14-alpine as frontend-builder
 WORKDIR /app
 ADD package.json webpack.config.js ./
 ADD src/ src/
