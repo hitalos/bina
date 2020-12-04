@@ -2,19 +2,18 @@ package controllers
 
 import (
 	"log"
-	"net/http"
 	"os"
 	"text/template"
 	"time"
 
-	"github.com/go-chi/chi"
+	"github.com/gofiber/fiber/v2"
 
 	"github.com/hitalos/bina/config"
 	"github.com/hitalos/bina/models"
 )
 
 // GetCard handle request to vCard files
-func GetCard(c *config.Config) http.HandlerFunc {
+func GetCard(cfg *config.Config) fiber.Handler {
 	cardTemplate := `BEGIN:VCARD
 VERSION:3.0
 FN;CHARSET=UTF-8:{{ .Contact.FullName }}
@@ -36,17 +35,15 @@ END:VCARD`
 	if err != nil {
 		log.Fatalln(err)
 	}
-	return func(w http.ResponseWriter, r *http.Request) {
-		contact := chi.URLParam(r, "contact")
+	return func(c *fiber.Ctx) error {
+		contact := c.Params("contact")
 		entry := models.Entry{}
 		if err := entry.GetByAccount(contact); err != nil {
-			errHandler(w, err)
-			return
+			return err
 		}
 
 		if err := entry.AttachPhoto(os.Getenv("PHOTOS_URL") + entry.ID + ".jpg"); err != nil {
-			errHandler(w, err)
-			return
+			return err
 		}
 
 		created := time.Now().In(time.UTC).Format(time.RFC3339)
@@ -56,12 +53,10 @@ END:VCARD`
 			Created string
 		}{
 			entry,
-			r.Host,
+			c.Hostname(),
 			created}
-		w.Header().Set("Content-Type", "text/vcard; charset=utf-8")
-		w.Header().Set("Content-Disposition", "inline; filename=\""+entry.FullName+".vcf\"")
-		if err := tmpl.Execute(w, data); err != nil {
-			errHandler(w, err)
-		}
+		c.Set("Content-Type", "text/vcard; charset=utf-8")
+		c.Set("Content-Disposition", "inline; filename=\""+entry.FullName+".vcf\"")
+		return tmpl.Execute(c, data)
 	}
 }

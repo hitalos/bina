@@ -3,11 +3,10 @@ package models
 import (
 	"encoding/base64"
 	"errors"
-	"io/ioutil"
-	"net/http"
 	"strings"
 
 	"github.com/go-ldap/ldap/v3"
+	"github.com/valyala/fasthttp"
 
 	"github.com/hitalos/bina/config"
 )
@@ -36,17 +35,12 @@ func (e Entry) LastName() string {
 
 // AttachPhoto loads a phto from URL and attach to Entry struct
 func (e *Entry) AttachPhoto(url string) error {
-	resp, err := http.Get(url)
+	statusCode, body, err := fasthttp.Get(nil, url)
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
 
-	if resp.StatusCode == http.StatusOK {
-		body, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			return err
-		}
+	if statusCode == fasthttp.StatusOK {
 		e.Photo = base64.StdEncoding.EncodeToString(body)
 	}
 	return nil

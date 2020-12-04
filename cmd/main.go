@@ -3,13 +3,14 @@ package main
 import (
 	"flag"
 	"fmt"
-	"net/http"
 	"os"
+	"time"
 
 	rice "github.com/GeertJohan/go.rice"
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
-	apm "go.elastic.co/apm/module/apmchi"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/compress"
+	"github.com/gofiber/fiber/v2/middleware/filesystem"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 
 	"github.com/hitalos/bina/config"
 	"github.com/hitalos/bina/controllers"
@@ -18,22 +19,26 @@ import (
 func main() {
 	configFilepath := flag.String("c", "config.yml", "Path of config file")
 	flag.Parse()
-	c := config.Load(*configFilepath)
-	r := chi.NewRouter()
-	r.Use(middleware.RealIP, apm.Middleware(), middleware.Compress(6))
+	cfg := config.Load(*configFilepath)
+
+	app := fiber.New(fiber.Config{
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  10 * time.Second,
+	})
+	app.Use(compress.New())
 	if os.Getenv("DEBUG") == "1" {
-		r.Use(middleware.Logger)
+		app.Use(logger.New())
 	}
 
-	r.Route("/contacts", func(r chi.Router) {
-		r.Get("/all.json", controllers.GetContacts(c))
-		r.Get("/{contact:[a-z]+}.vcf", controllers.GetCard(c))
-		r.Get("/{contact:[a-z]+}.jpg", controllers.GetPhoto(c))
-	})
-	r.Get("/images/logo.png", controllers.GetLogo(c.LogoURL))
+	contacts := app.Group("/contacts")
 
-	r.Handle("/*", http.FileServer(rice.MustFindBox("../public").HTTPBox()))
+	contacts.Get("/all.json", controllers.GetContacts(cfg))
+	contacts.Get("/:contact.vcf", controllers.GetCard(cfg))
+	contacts.Get("/:contact.jpg", controllers.GetPhoto(cfg))
 
-	fmt.Printf("Listening on port :%d\n", c.Port)
-	fmt.Println(http.ListenAndServe(fmt.Sprintf(":%d", c.Port), r))
+	app.Get("/images/logo.png", controllers.GetLogo(cfg.LogoURL))
+
+	app.Use("/", filesystem.New(filesystem.Config{Root: rice.MustFindBox("../public").HTTPBox()}))
+
+	fmt.Println(app.Listen(fmt.Sprintf(":%d", cfg.Port)))
 }
