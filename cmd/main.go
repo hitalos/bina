@@ -1,12 +1,14 @@
 package main
 
 import (
+	"embed"
 	"flag"
 	"fmt"
+	"io/fs"
+	"net/http"
 	"os"
 	"time"
 
-	rice "github.com/GeertJohan/go.rice"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
@@ -15,6 +17,9 @@ import (
 	"github.com/hitalos/bina/config"
 	"github.com/hitalos/bina/controllers"
 )
+
+//go:embed public
+var embeds embed.FS
 
 func main() {
 	configFilepath := flag.String("c", "config.yml", "Path of config file")
@@ -38,7 +43,8 @@ func main() {
 
 	app.Get("/images/logo.png", controllers.GetLogo(cfg.LogoURL))
 
-	app.Use("/", filesystem.New(filesystem.Config{Root: rice.MustFindBox("../public").HTTPBox()}))
+	publicDir, _ := fs.Sub(embeds, "public")
+	app.Use("/", filesystem.New(filesystem.Config{Root: http.FS(publicDir)}))
 
 	fmt.Println(app.Listen(fmt.Sprintf(":%d", cfg.Port)))
 }

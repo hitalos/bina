@@ -4,7 +4,7 @@ module.exports = {
   entry: './src/app.js',
   mode: process.env.NODE_ENV || 'production',
   output: {
-    path: path.resolve(__dirname, 'public', 'scripts'),
+    path: path.resolve(__dirname, 'cmd', 'public', 'scripts'),
     filename: 'bundle.js'
   },
   resolve: {

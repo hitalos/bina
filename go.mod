@@ -3,9 +3,7 @@ module github.com/hitalos/bina
 go 1.16
 
 require (
-	github.com/GeertJohan/go.rice v1.0.2
 	github.com/andybalholm/brotli v1.0.3 // indirect
-	github.com/daaku/go.zipexe v1.0.1 // indirect
 	github.com/go-asn1-ber/asn1-ber v1.5.3 // indirect
 	github.com/go-ldap/ldap/v3 v3.4.1
 	github.com/gofiber/fiber/v2 v2.19.0
