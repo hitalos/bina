@@ -6,12 +6,7 @@ RUN npm i && NODE_ENV=production npm run build
 
 FROM golang:alpine as backend-builder
 WORKDIR /app
-ADD go.mod go.sum ./
-COPY --from=frontend-builder /app/public/ .
-RUN go get github.com/GeertJohan/go.rice && \
-	go get github.com/GeertJohan/go.rice/rice
 ADD . .
-RUN rice -i ./cmd embed-go
 RUN CGO_ENABLED=0 go build -ldflags '-s -w' -trimpath -o bina ./cmd
 
 FROM scratch
