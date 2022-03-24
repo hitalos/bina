@@ -35,6 +35,6 @@ new Vue({
 
 if (window.location.protocol === 'https:' && !navigator.serviceWorker.controller) {
   navigator.serviceWorker.register('pwabuilder-sw.js', {
-    scope: './'
+    scope: './',
   })
 }

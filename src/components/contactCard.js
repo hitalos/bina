@@ -10,7 +10,7 @@ export default Vue.component('contact-card', {
         ipPhone: 'VoIP',
         facsimileTelephoneNumber: 'Fax',
         homePhone: 'Casa',
-        otherTelephone: 'Outro'
+        otherTelephone: 'Outro',
       },
     }
   },
@@ -42,7 +42,7 @@ export default Vue.component('contact-card', {
       else {
         el.className = el.className.replace(
           new RegExp(`(^|\\b)${el.className.split(' ').join('|')}(\\b|$)`, 'gi'),
-          ' '
+          ' ',
         )
       }
     },

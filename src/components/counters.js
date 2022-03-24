@@ -9,5 +9,5 @@ export default Vue.component('counters', {
       return this.$store.getters.count
     },
   },
-  template: '#counters-template'
+  template: '#counters-template',
 })

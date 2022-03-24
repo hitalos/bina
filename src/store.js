@@ -5,7 +5,7 @@ const removeAccents = (str) => [
   { chr: 'o', regex: /[ÓÔÕÖóôõöº]/ },
   { chr: 'u', regex: /[ÚÛÜúûü]/ },
   { chr: 'c', regex: /[ÇḈç]/ },
-  { chr: 'n', regex: /[Ññ]/ }
+  { chr: 'n', regex: /[Ññ]/ },
 ].reduce((acum, accent) => acum.replace(accent.regex, accent.chr), str)
 
 const show = (contact, searchTerms) => {
@@ -36,7 +36,7 @@ const show = (contact, searchTerms) => {
 export default (Vuex) => new Vuex.Store({
   state: {
     contacts: [],
-    searchTerms: ''
+    searchTerms: '',
   },
   getters: {
     total(state) {
@@ -60,12 +60,15 @@ export default (Vuex) => new Vuex.Store({
         if (err.response.data.name === 'InvalidCredentialsError') {
           alert('Erro!\nCredenciais do usuário de sistema inválidas.\nContate um administrador do domínio!')
         }
-        console.log(err.response.data)
+
+        console.log(err.response.data) // eslint-disable-line no-console
       })
     },
     filterChanged(state, searchTerms) {
       state.searchTerms = searchTerms
-      state.contacts = state.contacts.map((contact) => Object.assign(contact, { show: show(contact, searchTerms) }))
+      state.contacts = state.contacts.map((contact) => Object.assign(contact, {
+        show: show(contact, searchTerms),
+      }))
     },
   },
 })
