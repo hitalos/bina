@@ -1,12 +1,12 @@
 FROM node:16-alpine as frontend-builder
 WORKDIR /app
-ADD package.json webpack.config.js ./
-ADD src/ src/
+COPY package.json webpack.config.js ./
+COPY src/ src/
 RUN npm i && NODE_ENV=production npm run build
 
 FROM golang:alpine as backend-builder
 WORKDIR /app
-ADD . .
+COPY . .
 RUN CGO_ENABLED=0 go build -ldflags '-s -w' -trimpath -o bina ./cmd
 
 FROM scratch
