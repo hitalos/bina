@@ -5,8 +5,11 @@ logoURL: http://domain.com/images/logo.png
 
 providers:
   - type: ldap
+    ignoreSSLVerification: true # optional (default: false)
     params:
+      schema: ldaps # optional (default: ldap)
       host: 192.168.0.1
+      port: 636 # optional (default: 389)
       base: dc=domain,dc=com
       user: bina@domain.com
       pass: "123456"
