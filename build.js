@@ -1,15 +1,21 @@
 const esBuild = require('esbuild')
 const vuePlugin = require('esbuild-vue')
 
-esBuild.build({
-  entryPoints: ['src/app.js'],
+const devMode = process.env.NODE_ENV === 'dev'
+const options = {
   bundle: true,
-  minify: true,
+  minify: !devMode,
+}
+
+esBuild.build({
+  ...options,
+  entryPoints: ['src/app.js'],
   outfile: 'cmd/public/scripts/bundle.js',
-  plugins: [vuePlugin({ production: false })],
-  define: {
-    'process.env.NODE_ENV': JSON.stringify('production'),
-  },
-}).then((result) => {
-  console.log(result)
-})
+  plugins: [vuePlugin({ production: !devMode })],
+}).catch(console.error)
+
+esBuild.build({
+  ...options,
+  entryPoints: ['src/app.css'],
+  outfile: 'cmd/public/styles/bundle.css',
+}).catch(console.error)

@@ -20,11 +20,10 @@ lint:
 	${GOPATH}/bin/golint
 
 build_public: install_deps
-	mkdir -p cmd/public/styles cmd/public/scripts
-	npm test && npm run build
-	cat node_modules/vue-material/dist/vue-material.css > cmd/public/styles/bundle.css
-	echo >> cmd/public/styles/bundle.css
-	cat src/app.css >> cmd/public/styles/bundle.css
+	node ./build.js
+
+test:
+	npm test
 
 install_deps:
 	npm i
