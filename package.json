@@ -7,7 +7,7 @@
   "scripts": {
     "test": "npm run lint",
     "lint": "eslint src/",
-    "build": "webpack"
+    "build": "node ./build.js"
   },
   "dependencies": {
     "vue": "^2.6.14",
@@ -15,10 +15,10 @@
     "vuex": "^3.6.2"
   },
   "devDependencies": {
+    "esbuild": "^0.14.46",
+    "esbuild-vue": "^1.2.1",
     "eslint": "^8.18.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "webpack": "^5.73.0",
-    "webpack-cli": "^4.10.0"
+    "eslint-plugin-import": "^2.26.0"
   }
 }

@@ -2,6 +2,6 @@ bina*
 config.yml
 rice-box.go
 node_modules
-public/scripts
-public/styles
+cmd/public/scripts
+cmd/public/styles
 .env*
