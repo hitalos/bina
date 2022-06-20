@@ -28,5 +28,8 @@ test:
 install_deps:
 	npm i
 
+container_image:
+	docker build -t bina .
+
 clean:
 	rm -rf bina* node_modules cmd/public/scripts cmd/public/styles

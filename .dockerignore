@@ -7,7 +7,7 @@ Dockerfile
 Makefile
 README.md
 bina*
-cmd/rice-box.go
 node_modules
-package-lock.json
 stack.yml
+cmd/public/scripts
+cmd/public/styles
