@@ -1,0 +1,20 @@
+BEGIN:VCARD
+VERSION:3.0
+{{- with .Contact }}
+FN;CHARSET=UTF-8:{{ .FullName }}
+N;CHARSET=UTF-8:{{ .LastName }};{{ .FirstName }};;;
+NICKNAME;CHARSET=UTF-8:{{ .ID }}
+{{ if index .Emails "mail" }}EMAIL;CHARSET=UTF-8;type=HOME,INTERNET:{{ index .Emails "mail" }}{{ end }}
+LOGO;TYPE=PNG:%s
+PHOTO;ENCODING=b;TYPE=JPG:{{ .Photo }}
+{{ if index .Phones "mobile" }}TEL;TYPE=CELL:{{ index .Phones "mobile" }}{{ end }}
+{{ if index .Phones "ipPhone" }}TEL;TYPE=WORK,VOICE:{{ index .Phones "ipPhone" }}{{ end }}
+{{- if index .Others "title" }}
+TITLE;CHARSET=UTF-8:{{ index .Others "title" }}
+ROLE;CHARSET=UTF-8:{{ index .Others "title" }}
+{{- end }}
+{{ if index .Others "department" }}NOTE;CHARSET=UTF-8:{{ index .Others "department" }} - {{ index .Others "physicalDeliveryOfficeName" }}{{ end }}
+SOURCE;CHARSET=UTF-8:http://{{ $.Host }}/contacts/{{ .ID }}.vcf
+{{- end }}
+REV:{{ .Created }}
+END:VCARD
