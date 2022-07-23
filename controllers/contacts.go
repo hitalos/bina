@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
 	"time"
 
-	"github.com/gofiber/fiber/v2"
 	"github.com/hitalos/bina/config"
 	"github.com/hitalos/bina/models"
 )
@@ -35,24 +35,27 @@ func loadContacts(p []config.Provider) {
 }
 
 // GetContacts return all contacts in JSON format
-func GetContacts(cfg *config.Config) fiber.Handler {
+func GetContacts(cfg *config.Config) http.HandlerFunc {
 	loadContacts(cfg.Providers)
-	return func(c *fiber.Ctx) error {
-		if len(contactsJSON) != 0 && c.Get("If-Modified-Since") != "" {
-			browserCacheTime, err := time.Parse(time.RFC1123, c.Get("If-Modified-Since"))
+	return func(w http.ResponseWriter, r *http.Request) {
+		since := r.Header.Get("If-Modified-Since")
+		if len(contactsJSON) != 0 && since != "" {
+			browserCacheTime, err := time.Parse(time.RFC1123, since)
 			maxValidCache := lastCached.Add(time.Duration(cfg.CacheDuration) * time.Second).Unix()
 			if err == nil && browserCacheTime.Unix() < maxValidCache {
-				return c.SendStatus(fiber.StatusNotModified)
+				w.WriteHeader(http.StatusNotModified)
+				return
 			}
 		}
-		c.Set("Content-Type", fiber.MIMEApplicationJSONCharsetUTF8)
-		c.Set("Last-Modified", lastCached.Format(time.RFC1123))
-		c.Set("Cache-Control", fmt.Sprintf("max-age=%d", cfg.CacheDuration))
+		w.Header().Add("Content-Type", "application/json; charset=utf-8")
+		w.Header().Add("Last-Modified", lastCached.Format(time.RFC1123))
+		w.Header().Add("Cache-Control", fmt.Sprintf("max-age=%d", cfg.CacheDuration))
 		if len(contactsJSON) != 0 && validCache(cfg.CacheDuration) {
-			return c.Send(contactsJSON)
+			_, _ = w.Write(contactsJSON)
+			return
 		}
 
 		loadContacts(cfg.Providers)
-		return c.Send(contactsJSON)
+		_, _ = w.Write(contactsJSON)
 	}
 }

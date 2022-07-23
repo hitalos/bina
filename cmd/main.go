@@ -7,12 +7,9 @@ import (
 	"io/fs"
 	"net/http"
 	"os"
-	"time"
 
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/compress"
-	"github.com/gofiber/fiber/v2/middleware/filesystem"
-	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 
 	"github.com/hitalos/bina/config"
 	"github.com/hitalos/bina/controllers"
@@ -26,25 +23,22 @@ func main() {
 	flag.Parse()
 	cfg := config.Load(*configFilepath)
 
-	app := fiber.New(fiber.Config{
-		WriteTimeout: 10 * time.Second,
-		IdleTimeout:  10 * time.Second,
-	})
-	app.Use(compress.New())
+	app := chi.NewRouter()
+	app.Use(middleware.Compress(6))
 	if os.Getenv("DEBUG") == "1" {
-		app.Use(logger.New())
+		app.Use(middleware.Logger)
 	}
 
-	contacts := app.Group("/contacts")
-
-	contacts.Get("/all.json", controllers.GetContacts(cfg))
-	contacts.Get("/:contact.vcf", controllers.GetCard(cfg))
-	contacts.Get("/:contact.jpg", controllers.GetPhoto(cfg))
+	app.Route("/contacts", func(contacts chi.Router) {
+		contacts.Get("/all.json", controllers.GetContacts(cfg))
+		contacts.Get("/{contact}.vcf", controllers.GetCard(cfg))
+		contacts.Get("/{contact}.jpg", controllers.GetPhoto(cfg))
+	})
 
 	app.Get("/images/logo.png", controllers.GetLogo(cfg.LogoURL))
 
 	publicDir, _ := fs.Sub(embeds, "public")
-	app.Use("/", filesystem.New(filesystem.Config{Root: http.FS(publicDir)}))
+	app.Handle("/*", http.FileServer(http.FS(publicDir)))
 
-	fmt.Println(app.Listen(fmt.Sprintf(":%d", cfg.Port)))
+	fmt.Println(http.ListenAndServe(fmt.Sprintf(":%d", cfg.Port), app))
 }
