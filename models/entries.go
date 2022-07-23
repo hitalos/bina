@@ -5,6 +5,7 @@ import (
 	"sync"
 	"unicode"
 
+	"golang.org/x/text/runes"
 	"golang.org/x/text/transform"
 	"golang.org/x/text/unicode/norm"
 
@@ -21,9 +22,7 @@ func (e Entries) Len() int { return len([]Entry(e)) }
 
 func (e Entries) Less(i, j int) bool {
 	utf8ToASCII := func(s string) string {
-		t := transform.Chain(norm.NFD, transform.RemoveFunc(func(r rune) bool {
-			return unicode.Is(unicode.Mn, r)
-		}), norm.NFC)
+		t := transform.Chain(norm.NFD, runes.Remove(runes.In(unicode.Mn)), norm.NFC)
 		result, _, _ := transform.String(t, s)
 		return result
 	}
