@@ -16,8 +16,7 @@ build_android:
 all: build_linux build_windows build_macosx
 
 lint:
-	go get -u golang.org/x/lint/golint
-	${GOPATH}/bin/golint
+	golangci-lint run ./...
 
 build_public: install_deps
 	node ./build.js
