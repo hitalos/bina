@@ -31,8 +31,8 @@ func main() {
 
 	app.Route("/contacts", func(contacts chi.Router) {
 		contacts.Get("/all.json", controllers.GetContacts(cfg))
-		contacts.Get("/{contact}.vcf", controllers.GetCard(cfg))
-		contacts.Get("/{contact}.jpg", controllers.GetPhoto(cfg))
+		contacts.Get("/{contact}", controllers.GetCard(cfg))
+		contacts.Get("/{contact}", controllers.GetPhoto(cfg))
 	})
 
 	app.Get("/images/logo.png", controllers.GetLogo(cfg.LogoURL))

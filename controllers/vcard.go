@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"text/template"
 	"time"
 
@@ -27,7 +28,7 @@ func GetCard(cfg *config.Config) http.HandlerFunc {
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		contact := chi.URLParam(r, "contact")
+		contact := strings.TrimSuffix(chi.URLParam(r, "contact"), ".vcf")
 		entry := models.Entry{}
 		if err := entry.GetByAccount(contact); err != nil {
 			log.Println(err)

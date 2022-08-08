@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/go-chi/chi/v5"
 
@@ -48,7 +49,7 @@ func GetLogo(url string) http.HandlerFunc {
 // GetPhoto return contact photos
 func GetPhoto(cfg *config.Config) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		contact := chi.URLParam(r, "contact")
+		contact := strings.TrimSuffix(chi.URLParam(r, "contact"), ".jpg")
 		entry := models.Entry{}
 		if err := entry.GetByAccount(contact); err != nil {
 			log.Println(err)
