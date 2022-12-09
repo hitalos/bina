@@ -68,7 +68,11 @@ func Load(configFilepath string) *Config {
 		}
 		fmt.Println(err)
 	}
-	defer f.Close()
+	defer func() {
+		if err := f.Close(); err != nil {
+			fmt.Println(err)
+		}
+	}()
 
 	if err = yaml.NewDecoder(f).Decode(c); err != nil {
 		fmt.Println(err)
