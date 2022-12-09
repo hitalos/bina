@@ -1,8 +1,8 @@
-FROM docker.io/library/node:16-alpine as frontend-builder
+FROM docker.io/library/node:18-alpine as frontend-builder
 WORKDIR /app
 COPY package.json package-lock.json build.js ./
 COPY src/ src/
-RUN npm i && NODE_ENV=production npm run build
+RUN npm ci && NODE_ENV=production npm run build
 
 FROM docker.io/library/golang:alpine as backend-builder
 WORKDIR /app
