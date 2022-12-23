@@ -7,7 +7,7 @@ Dockerfile
 Makefile
 README.md
 bina*
-node_modules
+node_modules/
 stack.yml
 cmd/public/scripts
 cmd/public/styles

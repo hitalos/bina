@@ -4,9 +4,9 @@ COPY package.json package-lock.json build.js ./
 COPY src/ src/
 RUN npm i && NODE_ENV=production npm run build
 
-FROM docker.io/library/golang:alpine as backend-builder
+FROM docker.io/library/golang:1.19-alpine as backend-builder
 WORKDIR /app
-COPY go.mod go.sum .
+COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
 COPY --from=frontend-builder /app/cmd/public/scripts cmd/public/scripts
