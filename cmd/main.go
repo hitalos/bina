@@ -13,8 +13,8 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
-	"github.com/hitalos/bina/config"
-	"github.com/hitalos/bina/controllers"
+	"github.com/hitalos/bina/internal/config"
+	"github.com/hitalos/bina/internal/controllers"
 )
 
 //go:embed public
@@ -26,11 +26,20 @@ func main() {
 	cfg := config.Load(*configFilepath)
 
 	app := chi.NewRouter()
+
+	setMiddlewares(app)
+	setRoutes(app, cfg)
+	listen(app, cfg.Port)
+}
+
+func setMiddlewares(app *chi.Mux) {
 	app.Use(middleware.Compress(6))
 	if os.Getenv("DEBUG") == "1" {
 		app.Use(middleware.Logger)
 	}
+}
 
+func setRoutes(app *chi.Mux, cfg *config.Config) {
 	app.Route("/contacts", func(contacts chi.Router) {
 		contacts.Get("/all.json", controllers.GetContacts(cfg))
 		contacts.Get("/{contact}", controllers.GetCard(cfg))
@@ -41,8 +50,6 @@ func main() {
 
 	publicDir, _ := fs.Sub(embeds, "public")
 	app.Handle("/*", http.FileServer(http.FS(publicDir)))
-
-	listen(app, cfg.Port)
 }
 
 func listen(app *chi.Mux, port int) {

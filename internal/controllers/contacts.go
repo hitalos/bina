@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/hitalos/bina/config"
-	"github.com/hitalos/bina/models"
+	"github.com/hitalos/bina/internal/config"
+	"github.com/hitalos/bina/internal/models"
 )
 
 var (

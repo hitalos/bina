@@ -9,8 +9,8 @@ import (
 	"golang.org/x/text/transform"
 	"golang.org/x/text/unicode/norm"
 
-	"github.com/hitalos/bina/config"
-	"github.com/hitalos/bina/services/ldap"
+	"github.com/hitalos/bina/internal/config"
+	"github.com/hitalos/bina/internal/services/ldap"
 )
 
 var mutex sync.Mutex
