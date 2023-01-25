@@ -9,7 +9,7 @@ import (
 
 	"github.com/go-ldap/ldap/v3"
 
-	"github.com/hitalos/bina/config"
+	"github.com/hitalos/bina/internal/config"
 )
 
 // Entry struct of contact

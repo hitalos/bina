@@ -10,7 +10,7 @@ import (
 
 	"github.com/go-ldap/ldap/v3"
 
-	"github.com/hitalos/bina/config"
+	"github.com/hitalos/bina/internal/config"
 )
 
 func getAttrFields(p config.Provider) []string {
