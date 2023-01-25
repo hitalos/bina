@@ -1,17 +1,17 @@
 build: build_public
-	CGO_ENABLED=0 go build -ldflags '-s -w' -trimpath -o bina ./cmd
+	CGO_ENABLED=0 go build -ldflags '-s -w' -trimpath -o dist/bina ./cmd
 
 build_linux:
-	CGO_ENABLED=0 GOOS=linux go build -ldflags '-s -w' -trimpath -o bina_linux ./cmd
+	CGO_ENABLED=0 GOOS=linux go build -ldflags '-s -w' -trimpath -o dist/bina_linux ./cmd
 
 build_windows:
-	CGO_ENABLED=0 GOOS=windows go build -ldflags '-s -w' -trimpath -o bina.exe ./cmd
+	CGO_ENABLED=0 GOOS=windows go build -ldflags '-s -w' -trimpath -o dist/bina.exe ./cmd
 
 build_macosx:
-	CGO_ENABLED=0 GOOS=darwin go build -ldflags '-s -w' -trimpath -o bina_macosx ./cmd
+	CGO_ENABLED=0 GOOS=darwin go build -ldflags '-s -w' -trimpath -o dist/bina_macosx ./cmd
 
 build_android:
-	GOOS=linux GOARCH=arm GOARM=7 go build -o bina_android ./cmd
+	CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -ldflags '-s -w' -trimpath -o dist/bina_android ./cmd
 
 all: build_linux build_windows build_macosx
 
@@ -35,4 +35,4 @@ container_image_push:
 	$(IMAGE_BUILDER) image push registry.jfal.jus.br/nti/bina:latest
 
 clean:
-	rm -rf bina* node_modules cmd/public/scripts cmd/public/styles
+	rm -rf dist node_modules cmd/public/scripts cmd/public/styles
