@@ -27,8 +27,12 @@ test:
 install_deps:
 	npm i
 
+IMAGE_BUILDER=$(shell [ -e /usr/bin/podman ] && echo podman || echo docker)
 container_image:
-	docker build -t bina .
+	$(IMAGE_BUILDER) image build -t registry.jfal.jus.br/nti/bina:latest .
+
+container_image_push:
+	$(IMAGE_BUILDER) image push registry.jfal.jus.br/nti/bina:latest
 
 clean:
 	rm -rf bina* node_modules cmd/public/scripts cmd/public/styles
