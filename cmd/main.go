@@ -5,8 +5,10 @@ import (
 	"flag"
 	"fmt"
 	"io/fs"
+	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -40,5 +42,18 @@ func main() {
 	publicDir, _ := fs.Sub(embeds, "public")
 	app.Handle("/*", http.FileServer(http.FS(publicDir)))
 
-	fmt.Println(http.ListenAndServe(fmt.Sprintf(":%d", cfg.Port), app))
+	listen(app, cfg.Port)
+}
+
+func listen(app chi.Router, port int) {
+	s := http.Server{
+		Addr:         fmt.Sprintf(":%d", port),
+		Handler:      app,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  30 * time.Second,
+	}
+
+	fmt.Printf("Listening on port %d\n", port)
+	log.Fatalln(s.ListenAndServe())
 }
