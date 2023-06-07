@@ -40,6 +40,8 @@ var contacts Entries
 // GetContacts returns a list of all Entry
 func GetContacts(providers []config.Provider) (Entries, error) {
 	mutex.Lock()
+	defer mutex.Unlock()
+
 	contacts = Entries{}
 	e := Entry{}
 	for _, provider := range providers {
@@ -53,7 +55,6 @@ func GetContacts(providers []config.Provider) (Entries, error) {
 		}
 	}
 	sort.Sort(&contacts)
-	mutex.Unlock()
 
 	return contacts, nil
 }

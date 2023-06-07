@@ -20,23 +20,26 @@ func validCache(duration int) bool {
 	return lastCached.Add(time.Duration(duration)*time.Second).Unix() > time.Now().Unix()
 }
 
-func loadContacts(p []config.Provider) {
+func loadContacts(p []config.Provider) error {
 	list, err := models.GetContacts(p)
 	if err != nil {
-		log.Println(err)
-		return
+		return err
 	}
 	if contactsJSON, err = json.Marshal(list); err != nil {
-		log.Println(err)
-		return
+		return err
 	}
 
 	lastCached = time.Now()
+
+	return nil
 }
 
 // GetContacts return all contacts in JSON format
 func GetContacts(cfg *config.Config) http.HandlerFunc {
-	loadContacts(cfg.Providers)
+	if err := loadContacts(cfg.Providers); err != nil {
+		log.Println(err)
+	}
+
 	return func(w http.ResponseWriter, r *http.Request) {
 		since := r.Header.Get("If-Modified-Since")
 		if len(contactsJSON) != 0 && since != "" {
@@ -55,7 +58,14 @@ func GetContacts(cfg *config.Config) http.HandlerFunc {
 			return
 		}
 
-		loadContacts(cfg.Providers)
+		if err := loadContacts(cfg.Providers); err != nil {
+			log.Println(err)
+			w.WriteHeader(http.StatusServiceUnavailable)
+			_, _ = w.Write([]byte("Serviço indisponível"))
+
+			return
+		}
+
 		_, _ = w.Write(contactsJSON)
 	}
 }
