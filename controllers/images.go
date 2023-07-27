@@ -64,6 +64,10 @@ func GetPhoto(cfg *config.Config) http.HandlerFunc {
 		photoBuf, err := loadFromURL(cfg.PhotosURL + entry.ID + ".jpg")
 		if err != nil {
 			log.Println(err)
+			if err.Error() == http.StatusText(http.StatusNotFound) {
+				w.WriteHeader(http.StatusNotFound)
+				return
+			}
 			return
 		}
 
