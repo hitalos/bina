@@ -29,6 +29,7 @@ func GetContacts(p config.Provider) ([]*ldap.Entry, error) {
 	}
 
 	filter := "(&" +
+		"(displayName=*)" +
 		"(|" + phoneFields + ")" +
 		"(objectCategory=person)" +
 		"(!(UserAccountControl:1.2.840.113556.1.4.803:=2))" +
