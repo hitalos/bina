@@ -35,6 +35,7 @@ func main() {
 func setMiddlewares(app *chi.Mux) {
 	app.Use(middleware.Compress(6))
 	if os.Getenv("DEBUG") == "1" {
+		app.Use(middleware.RealIP)
 		app.Use(middleware.Logger)
 	}
 }
