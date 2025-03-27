@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"strings"
 	"text/template"
 	"time"
@@ -48,7 +49,7 @@ func GetCard(cfg *config.Config) http.HandlerFunc {
 		}{entry, r.Host, created}
 
 		w.Header().Set("Content-Type", "text/vcard; charset=utf-8")
-		w.Header().Set("Content-Disposition", fmt.Sprintf(`inline; filename="%s.vcf"`, entry.FullName))
+		w.Header().Set("Content-Disposition", fmt.Sprintf(`inline; filename="%s.vcf"`, url.PathEscape(entry.FullName)))
 
 		_ = tmpl.Execute(w, data)
 	}
