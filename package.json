@@ -15,7 +15,7 @@
     "vuex": "3.6.2"
   },
   "devDependencies": {
-    "esbuild": "^0.25.1",
+    "esbuild": "^0.25.4",
     "esbuild-vue": "^1.2.2",
     "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",
