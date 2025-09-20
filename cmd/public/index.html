@@ -6,13 +6,25 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
-	<link rel="stylesheet" href="/styles/bundle.css">
+	<link rel="stylesheet" href="/assets/styles/index.min.css">
+	{{ with .CustomStyles -}}
+	<style>{{ . }}</style>
+	{{- end }}
 	<link rel="manifest" href="/manifest.json">
 </head>
 
 <body>
-	<div id="app"></div>
-	<script src="/scripts/bundle.js"></script>
+	<header>
+		<h1>Bina</h1>
+		<label for="search">
+			Busca: <input type="search" id="search" tabindex="1" autocomplete="off">
+		</label>
+	</header>
+	<main>
+		<p></p>
+		<div id="results"></div>
+	</main>
+	<script src="/assets/scripts/index.min.js"></script>
 	<noscript>Seu javascript está desativado!</noscript>
 </body>
 </html>

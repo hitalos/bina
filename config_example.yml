@@ -3,6 +3,12 @@ enableGravatar: true
 photosURL: http://domain.com/photos/
 logoURL: http://domain.com/images/logo.png
 
+customStyles: |
+  :root {
+    --primary-color: navy;
+    --link-color: pink;
+  }
+
 providers:
   - type: ldap
     ignoreSSLVerification: true # optional (default: false)

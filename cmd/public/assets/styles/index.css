@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+:root {
+	--primary-color: #1447e6;
+	--link-color: #ec003f;
+}
+
+@layer components {
+	html,
+	body {
+		@apply min-h-screen;
+
+		header {
+			@apply flex items-center justify-between font-light p-4 text-white;
+			background-color: var(--primary-color);
+		}
+
+		> main {
+			@apply m-4;
+		}
+	}
+
+	h1 {
+		@apply mr-4 text-4xl;
+	}
+
+	input {
+		@apply border-b outline-hidden;
+
+		&:focus {
+			@apply outline-1 outline-white;
+		}
+	}
+}
+
+#results {
+	@apply gap-4 grid justify-items-center my-4 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4;
+
+	.card {
+		@apply border-neutral-200 border max-w-md min-h-64 relative rounded-t-2xl rounded-b-2xl shadow-black shadow-md/40 transition-all w-full;
+
+		&:hover {
+			@apply shadow-xl -translate-y-2;
+
+			.front footer::after {
+				@apply h-10 w-10;
+			}
+		}
+
+		main {
+			@apply m-4;
+		}
+
+		&.contact {
+			@apply bg-neutral-200 border-neutral-300;
+
+			.front footer::after {
+				@apply from-neutral-300 to-neutral-100 via-neutral-400 via-50%;
+			}
+		}
+
+		&.turned {
+			.front {
+				@apply hidden opacity-0;
+			}
+
+			.back {
+				@apply grid opacity-100;
+
+				header {
+					@apply h-16;
+				}
+			}
+		}
+
+		header {
+			@apply h-28 p-4 rounded-t-2xl transition-all;
+
+			h2 {
+				@apply font-medium text-2xl;
+			}
+
+			img {
+				@apply max-w-20 max-h-20 rounded drop-shadow-md/50 drop-shadow-black;
+			}
+		}
+
+		.front {
+			@apply absolute grid grid-rows-subgrid min-h-full min-w-full transition-opacity;
+
+			> main {
+				@apply min-h-12 mb-1;
+			}
+
+			> footer {
+				@apply flex items-end justify-between m-4;
+
+				a {
+					@apply block font-bold text-3xl;
+					color: var(--link-color);
+				}
+
+				&::after {
+					@apply bg-gradient-to-br from-50% from-neutral-200 h-7 -mb-4.25 -mr-4 rounded-tl-2xl rounded-br-2xl to-100% to-neutral-100 transition-all via-neutral-300 via-50% w-7;
+					content: '';
+				}
+			}
+		}
+
+		.back {
+			@apply absolute hidden min-h-full min-w-full opacity-0 content-between transition-opacity;
+
+			> main {
+				@apply text-sm mx-4 my-2;
+
+				dt {
+					@apply float-left font-bold mr-2;
+				}
+			}
+
+			> footer a {
+				@apply block font-bold mx-4 my-2 text-2xl;
+				color: var(--link-color);
+			}
+		}
+	}
+}

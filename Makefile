@@ -15,24 +15,29 @@ build_android:
 
 all: build_linux build_windows build_macosx
 
+dev:
+	go run -tags dev ./cmd
+
 lint:
 	golangci-lint run ./...
 
-build_public: install_deps
-	node ./build.js
+build_public: install_deps js css
 
-test:
-	npm test
+js:
+	npm run build::js
+
+css:
+	npm run build::css
 
 install_deps:
-	npm i
+	npm ci
 
-IMAGE_BUILDER=$(shell [ -e /usr/bin/podman ] && echo podman || echo docker)
+IMAGE_BUILDER=$(shell [ -e /usr/bin/buildah ] && echo buildah || echo docker)
 container_image:
-	$(IMAGE_BUILDER) image build -t registry.jfal.jus.br/nti/bina:latest .
+	$(IMAGE_BUILDER) build -t registry.jfal.jus.br/nti/bina:latest .
 
 container_image_push:
-	$(IMAGE_BUILDER) image push registry.jfal.jus.br/nti/bina:latest
+	$(IMAGE_BUILDER) push registry.jfal.jus.br/nti/bina:latest
 
 clean:
-	rm -rf dist node_modules cmd/public/scripts cmd/public/styles
+	rm -rf dist node_modules cmd/public/assets/scripts/*.min.js* cmd/public/assets/styles/*.min.css*

@@ -1,13 +1,11 @@
 .editorconfig
-.env
-.eslintrc
 .git
 .gitignore
 Dockerfile
 Makefile
 README.md
-bina*
+dist/
 node_modules/
-stack.yml
-cmd/public/scripts
-cmd/public/styles
+cmd/public/assets/scripts/*.min.js*
+cmd/public/assets/styles/*.min.css*
+config*.yml

@@ -6,8 +6,9 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"mime"
 	"net/http"
-	"strings"
+	"path/filepath"
 
 	"github.com/go-chi/chi/v5"
 
@@ -41,7 +42,8 @@ func GetLogo(url string) http.HandlerFunc {
 				return
 			}
 		}
-		w.Header().Set("Content-Type", "image/png")
+
+		w.Header().Set("Content-Type", mime.TypeByExtension(filepath.Ext(url)))
 		_, _ = w.Write(logoBuf)
 	}
 }
@@ -49,7 +51,7 @@ func GetLogo(url string) http.HandlerFunc {
 // GetPhoto return contact photos
 func GetPhoto(cfg *config.Config) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		contact := strings.TrimSuffix(chi.URLParam(r, "contact"), ".jpg")
+		contact := chi.URLParam(r, "contact")
 		entry := models.Entry{}
 		if err := entry.GetByAccount(contact); err != nil {
 			log.Println(err)
@@ -63,11 +65,14 @@ func GetPhoto(cfg *config.Config) http.HandlerFunc {
 		}
 		photoBuf, err := loadFromURL(cfg.PhotosURL + entry.ID + ".jpg")
 		if err != nil {
-			log.Println(err)
 			if err.Error() == http.StatusText(http.StatusNotFound) {
-				w.WriteHeader(http.StatusNotFound)
-				return
+				http.Redirect(w, r, "/images/default.png", http.StatusTemporaryRedirect)
 			}
+			return
+		}
+
+		if len(photoBuf) == 0 {
+			http.Redirect(w, r, "/images/default.png", http.StatusTemporaryRedirect)
 			return
 		}
 

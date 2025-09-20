@@ -1,5 +1,6 @@
 config.yml
 dist
 node_modules
-cmd/public/scripts
-cmd/public/styles
+cmd/public/assets/scripts/*.min.js*
+cmd/public/assets/styles/*.min.css*
+cmd/public/contacts

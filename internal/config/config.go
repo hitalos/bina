@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"html/template"
 	"os"
 
 	"gopkg.in/yaml.v3"
@@ -9,12 +10,13 @@ import (
 
 // Config represents the configuration of this application
 type Config struct {
-	Port           int        `yaml:"port"`
-	CacheDuration  int        `yaml:"cacheDuration"`
-	EnableGravatar bool       `yaml:"enableGravatar"`
-	PhotosURL      string     `yaml:"photosURL"`
-	LogoURL        string     `yaml:"logoURL"`
-	Providers      []Provider `yaml:"providers"`
+	Port           int          `yaml:"port"`
+	CacheDuration  int          `yaml:"cacheDuration"`
+	EnableGravatar bool         `yaml:"enableGravatar"`
+	PhotosURL      string       `yaml:"photosURL"`
+	LogoURL        string       `yaml:"logoURL"`
+	Providers      []Provider   `yaml:"providers"`
+	CustomStyles   template.CSS `yaml:"customStyles,omitempty"`
 }
 
 // Provider represents the configuration of one information provider

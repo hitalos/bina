@@ -5,17 +5,17 @@
   "author": "Hítalo Silva <hitalos@gmail.com>",
   "license": "ISC",
   "scripts": {
-    "test": "npm run lint",
-    "lint": "eslint src/",
-    "build": "node ./build.js"
+    "build::js": "esbuild cmd/public/assets/scripts/index.mjs --bundle --minify --outfile=cmd/public/assets/scripts/index.min.js",
+		"build::css": "tailwindcss -i cmd/public/assets/styles/index.css -o cmd/public/assets/styles/index.min.css",
+		"dev::js": "esbuild cmd/public/assets/scripts/index.mjs --bundle --sourcemap --outfile=cmd/public/assets/scripts/index.min.js --watch",
+		"dev::css": "tailwindcss -i cmd/public/assets/styles/index.css -o cmd/public/assets/styles/index.min.css --map --watch"
   },
   "dependencies": {
-    "vue": "2.7.8",
-    "vue-material": "0.7.1",
-    "vuex": "3.6.2"
+		"d3": "^7.9.0",
+    "tailwindcss": "^4.1.13"
   },
   "devDependencies": {
-    "esbuild": "^0.25.10",
-    "esbuild-vue": "^1.2.2"
+		"@tailwindcss/cli": "^4.1.13",
+    "esbuild": "^0.25.10"
   }
 }

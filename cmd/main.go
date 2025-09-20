@@ -1,10 +1,8 @@
 package main
 
 import (
-	"embed"
 	"flag"
 	"fmt"
-	"io/fs"
 	"log"
 	"net/http"
 	"os"
@@ -13,12 +11,10 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
+	"github.com/hitalos/bina/cmd/public"
 	"github.com/hitalos/bina/internal/config"
 	"github.com/hitalos/bina/internal/controllers"
 )
-
-//go:embed public
-var embeds embed.FS
 
 func main() {
 	configFilepath := flag.String("c", "config.yml", "Path of config file")
@@ -43,14 +39,14 @@ func setMiddlewares(app *chi.Mux) {
 func setRoutes(app *chi.Mux, cfg *config.Config) {
 	app.Route("/contacts", func(contacts chi.Router) {
 		contacts.Get("/all.json", controllers.GetContacts(cfg))
-		contacts.Get("/{contact}.vcf", controllers.GetCard(cfg))
-		contacts.Get("/{contact}.jpg", controllers.GetPhoto(cfg))
+		contacts.Get("/vcard/{contact:[A-Za-z0-9.]+}", controllers.GetCard(cfg))
+		contacts.Get(`/photo/{contact:[A-Za-z0-9.]+}`, controllers.GetPhoto(cfg))
 	})
 
-	app.Get("/images/logo.png", controllers.GetLogo(cfg.LogoURL))
+	app.Get("/images/logo", controllers.GetLogo(cfg.LogoURL))
 
-	publicDir, _ := fs.Sub(embeds, "public")
-	app.Handle("/*", http.FileServer(http.FS(publicDir)))
+	app.Get("/", controllers.Index(cfg))
+	app.Handle("/*", http.FileServer(public.FS))
 }
 
 func listen(app chi.Router, port int) {
