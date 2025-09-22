@@ -24,8 +24,10 @@ func (e Entries) Less(i, j int) bool {
 	utf8ToASCII := func(s string) string {
 		t := transform.Chain(norm.NFD, runes.Remove(runes.In(unicode.Mn)), norm.NFC)
 		result, _, _ := transform.String(t, s)
+
 		return result
 	}
+
 	return utf8ToASCII([]Entry(e)[i].FullName) < utf8ToASCII([]Entry(e)[j].FullName)
 }
 

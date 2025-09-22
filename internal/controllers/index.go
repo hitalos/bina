@@ -14,7 +14,7 @@ func Index(cfg *config.Config) http.HandlerFunc {
 	bs, _ := io.ReadAll(f)
 	idxTmpl, _ := template.New("").Parse(string(bs))
 
-	return func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, _ *http.Request) {
 		data := struct {
 			CustomStyles template.CSS
 		}{cfg.CustomStyles}

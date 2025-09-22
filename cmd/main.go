@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"time"
@@ -58,6 +58,8 @@ func listen(app chi.Router, port int) {
 		IdleTimeout:  30 * time.Second,
 	}
 
-	fmt.Printf("Listening on port %d\n", port)
-	log.Fatalln(s.ListenAndServe())
+	slog.Info("Listening on", "port", port)
+	if err := s.ListenAndServe(); err != nil {
+		slog.Error(err.Error())
+	}
 }

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"context"
 	"encoding/base64"
 	"errors"
 	"io"
@@ -10,6 +11,10 @@ import (
 	"github.com/go-ldap/ldap/v3"
 
 	"github.com/hitalos/bina/internal/config"
+)
+
+var (
+	ErrNotFound = errors.New("not found")
 )
 
 // Entry struct of contact
@@ -31,16 +36,21 @@ func (e Entry) FirstName() string {
 // LastName returns the last name of contact
 func (e Entry) LastName() string {
 	names := strings.Split(e.FullName, " ")
+
 	return names[len(names)-1]
 }
 
-// AttachPhoto loads a phto from URL and attach to Entry struct
-func (e *Entry) AttachPhoto(url string) error {
-	resp, err := http.Get(url)
+// AttachPhoto loads a photo from URL and attach to Entry struct
+func (e *Entry) AttachPhoto(url string, ctx context.Context) error {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode == http.StatusOK {
 		body, err := io.ReadAll(resp.Body)
@@ -58,10 +68,12 @@ func (e *Entry) GetByAccount(account string) error {
 	for _, entry := range []Entry(contacts) {
 		if entry.ID == account {
 			*e = entry
+
 			return nil
 		}
 	}
-	return errors.New("not found")
+
+	return ErrNotFound
 }
 
 func makeMap(e *ldap.Entry, fields []string) map[string]string {
@@ -71,6 +83,7 @@ func makeMap(e *ldap.Entry, fields []string) map[string]string {
 			list[field] = e.GetAttributeValue(field)
 		}
 	}
+
 	return list
 }
 

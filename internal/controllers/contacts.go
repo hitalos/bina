@@ -3,7 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+	"log/slog"
 	"net/http"
 	"time"
 
@@ -37,7 +37,7 @@ func loadContacts(p []config.Provider) error {
 // GetContacts return all contacts in JSON format
 func GetContacts(cfg *config.Config) http.HandlerFunc {
 	if err := loadContacts(cfg.Providers); err != nil {
-		log.Println(err)
+		slog.Error(err.Error())
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -47,6 +47,7 @@ func GetContacts(cfg *config.Config) http.HandlerFunc {
 			maxValidCache := lastCached.Add(time.Duration(cfg.CacheDuration) * time.Second).Unix()
 			if err == nil && browserCacheTime.Unix() < maxValidCache {
 				w.WriteHeader(http.StatusNotModified)
+
 				return
 			}
 		}
@@ -55,11 +56,12 @@ func GetContacts(cfg *config.Config) http.HandlerFunc {
 		w.Header().Add("Cache-Control", fmt.Sprintf("max-age=%d", cfg.CacheDuration))
 		if len(contactsJSON) != 0 && validCache(cfg.CacheDuration) {
 			_, _ = w.Write(contactsJSON)
+
 			return
 		}
 
 		if err := loadContacts(cfg.Providers); err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
 			w.WriteHeader(http.StatusServiceUnavailable)
 			_, _ = w.Write([]byte("Serviço indisponível"))
 

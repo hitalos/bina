@@ -3,7 +3,9 @@ package config
 import (
 	"fmt"
 	"html/template"
+	"log/slog"
 	"os"
+	"path/filepath"
 
 	"gopkg.in/yaml.v3"
 )
@@ -62,23 +64,22 @@ func (c *Config) setDefaultsOnEmpty() {
 func Load(configFilepath string) *Config {
 	c := new(Config)
 
-	f, err := os.Open(configFilepath)
+	f, err := os.Open(filepath.Clean(configFilepath))
 	if err != nil {
 		if os.IsNotExist(err) {
-			fmt.Printf("Crie um arquivo %q no formato do exemplo do projeto\n", configFilepath)
+			slog.Error(fmt.Sprintf("Crie um arquivo %q no formato do exemplo do projeto", configFilepath))
 			os.Exit(1)
 		}
-		fmt.Println(err)
+		slog.Error(err.Error())
 	}
-	defer func() {
-		if err := f.Close(); err != nil {
-			fmt.Println(err)
-		}
-	}()
 
 	if err = yaml.NewDecoder(f).Decode(c); err != nil {
-		fmt.Println(err)
+		slog.Error(err.Error())
 		os.Exit(1)
+	}
+
+	if err := f.Close(); err != nil {
+		slog.Error(err.Error())
 	}
 
 	c.setDefaultsOnEmpty()

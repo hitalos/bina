@@ -3,7 +3,7 @@ package controllers
 import (
 	_ "embed"
 	"fmt"
-	"log"
+	"log/slog"
 	"net/http"
 	"net/url"
 	"text/template"
@@ -31,12 +31,14 @@ func GetCard(cfg *config.Config) http.HandlerFunc {
 		contact := chi.URLParam(r, "contact")
 		entry := models.Entry{}
 		if err := entry.GetByAccount(contact); err != nil {
-			log.Println(err)
+			slog.Error(err.Error())
+
 			return
 		}
 
-		if err := entry.AttachPhoto(cfg.PhotosURL + entry.ID + ".jpg"); err != nil {
-			log.Println(err)
+		if err := entry.AttachPhoto(cfg.PhotosURL+entry.ID+".jpg", r.Context()); err != nil {
+			slog.Error(err.Error())
+
 			return
 		}
 
