@@ -1,3 +1,4 @@
+.env
 config.yml
 dist
 node_modules
