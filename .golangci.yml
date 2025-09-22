@@ -1,0 +1,19 @@
+version: "2"
+linters:
+  default: all
+  disable:
+    - depguard
+    - exhaustruct
+    - gochecknoglobals
+    - godot
+    - mnd
+    - noinlineerr
+    - recvcheck
+    - revive
+    - tagliatelle
+    - varnamelen
+    - wrapcheck
+    - wsl
+    - wsl_v5
+
+

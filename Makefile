@@ -21,6 +21,12 @@ dev:
 lint:
 	golangci-lint run ./...
 
+sec:
+	go vet ./...
+	govulncheck ./...
+	grype .
+	trivy fs .
+
 build_public: install_deps js css
 
 js:
@@ -33,11 +39,16 @@ install_deps:
 	npm ci
 
 IMAGE_BUILDER=$(shell [ -e /usr/bin/buildah ] && echo buildah || echo docker)
+CONTAINER_REGISTRY?=localhost
 container_image:
-	$(IMAGE_BUILDER) build -t registry.jfal.jus.br/nti/bina:latest .
+	$(IMAGE_BUILDER) build -t $(CONTAINER_REGISTRY)/nti/bina:latest .
+
+container_image_sec:
+	trivy image $(CONTAINER_REGISTRY)/nti/bina:latest
+	grype $(CONTAINER_REGISTRY)/nti/bina:latest
 
 container_image_push:
-	$(IMAGE_BUILDER) push registry.jfal.jus.br/nti/bina:latest
+	$(IMAGE_BUILDER) push $(CONTAINER_REGISTRY)/nti/bina:latest
 
 clean:
 	rm -rf dist node_modules cmd/public/assets/scripts/*.min.js* cmd/public/assets/styles/*.min.css*
