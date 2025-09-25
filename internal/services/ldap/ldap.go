@@ -46,16 +46,8 @@ func GetContacts(p config.Provider) ([]*ldap.Entry, error) {
 	if err != nil {
 		return nil, fmt.Errorf("err: %w; invalid port: %s", err, p.Params["port"])
 	}
-	hostport := net.JoinHostPort(p.Params["host"], p.Params["port"])
 
-	var ldapConn *ldap.Conn
-	switch p.Params["schema"] {
-	case "ldaps":
-		tlsConf := &tls.Config{InsecureSkipVerify: p.IgnoreSSLVerification} //nolint:gosec // allow insecure skip verify
-		ldapConn, err = ldap.DialURL("ldaps://"+hostport, ldap.DialWithTLSConfig(tlsConf))
-	default:
-		ldapConn, err = ldap.DialURL(p.Params["schema"] + "://" + hostport)
-	}
+	ldapConn, err := NewLdapConnection(p)
 	if err != nil {
 		return nil, err
 	}
@@ -82,4 +74,25 @@ func GetContacts(p config.Provider) ([]*ldap.Entry, error) {
 	}
 
 	return result.Entries, nil
+}
+
+func NewLdapConnection(p config.Provider) (*ldap.Conn, error) {
+	var (
+		err      error
+		ldapConn *ldap.Conn
+		hostport = net.JoinHostPort(p.Params["host"], p.Params["port"])
+	)
+
+	switch p.Params["schema"] {
+	case "ldaps":
+		tlsConf := &tls.Config{InsecureSkipVerify: p.IgnoreSSLVerification} //nolint:gosec // allow insecure skip verify
+		ldapConn, err = ldap.DialURL("ldaps://"+hostport, ldap.DialWithTLSConfig(tlsConf))
+	default:
+		ldapConn, err = ldap.DialURL(p.Params["schema"] + "://" + hostport)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return ldapConn, nil
 }

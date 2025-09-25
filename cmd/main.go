@@ -43,6 +43,7 @@ func setRoutes(app *chi.Mux, cfg *config.Config) {
 		contacts.Get(`/photo/{contact:[A-Za-z0-9.]+}`, controllers.GetPhoto(cfg))
 	})
 
+	app.Get("/healthz", controllers.HealthCheck(cfg))
 	app.Get("/images/logo", controllers.GetLogo(cfg.LogoURL))
 
 	app.Get("/", controllers.Index(cfg))

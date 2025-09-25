@@ -85,6 +85,11 @@
 			}
 		}
 
+		footer a {
+			@apply block font-bold;
+			color: var(--link-color);
+		}
+
 		.front {
 			@apply absolute grid grid-rows-subgrid min-h-full min-w-full transition-opacity;
 
@@ -96,8 +101,7 @@
 				@apply flex items-end justify-between m-4;
 
 				a {
-					@apply block font-bold text-3xl;
-					color: var(--link-color);
+					@apply text-3xl;
 				}
 
 				&::after {
@@ -119,8 +123,7 @@
 			}
 
 			> footer a {
-				@apply block font-bold mx-4 my-2 text-2xl;
-				color: var(--link-color);
+				@apply mx-4 my-2 text-2xl;
 			}
 		}
 	}
