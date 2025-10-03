@@ -6,7 +6,7 @@
   "license": "ISC",
   "scripts": {
     "build::js": "esbuild cmd/public/assets/scripts/index.mjs --bundle --minify --outfile=cmd/public/assets/scripts/index.min.js",
-		"build::css": "tailwindcss -i cmd/public/assets/styles/index.css -o cmd/public/assets/styles/index.min.css",
+		"build::css": "tailwindcss -i cmd/public/assets/styles/index.css --minify -o cmd/public/assets/styles/index.min.css",
 		"dev::js": "esbuild cmd/public/assets/scripts/index.mjs --bundle --sourcemap --outfile=cmd/public/assets/scripts/index.min.js --watch",
 		"dev::css": "tailwindcss -i cmd/public/assets/styles/index.css -o cmd/public/assets/styles/index.min.css --map --watch"
   },
