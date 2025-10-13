@@ -80,7 +80,7 @@ func GetPhoto(cfg *config.Config) http.HandlerFunc {
 		}
 		photoBuf, err := loadFromURL(cfg.PhotosURL+entry.ID+".jpg", r.Context())
 		if err != nil {
-			if err.Error() == http.StatusText(http.StatusNotFound) {
+			if errors.Is(err, ErrNonOKHTTPStatus) {
 				http.Redirect(w, r, "/images/default.png", http.StatusTemporaryRedirect)
 			}
 
