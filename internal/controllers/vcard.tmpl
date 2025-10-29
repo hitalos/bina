@@ -6,7 +6,7 @@ N;CHARSET=UTF-8:{{ .LastName }};{{ .FirstName }};;;
 NICKNAME;CHARSET=UTF-8:{{ .ID }}
 {{ if index .Emails "mail" }}EMAIL;CHARSET=UTF-8;type=HOME,INTERNET:{{ index .Emails "mail" }}{{ end }}
 LOGO;TYPE=PNG:%s
-PHOTO;ENCODING=b;TYPE=JPG:{{ .Photo }}
+PHOTO;ENCODING=b;TYPE={{.ImgType}}:{{ .Photo }}
 {{ if index .Phones "mobile" }}TEL;TYPE=CELL:{{ index .Phones "mobile" }}{{ end }}
 {{ if index .Phones "ipPhone" }}TEL;TYPE=WORK,VOICE:{{ index .Phones "ipPhone" }}{{ end }}
 {{- if index .Others "title" }}

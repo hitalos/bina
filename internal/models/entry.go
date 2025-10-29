@@ -95,4 +95,5 @@ func (e *Entry) LoadFromLDAPEntry(entry *ldap.Entry, p config.Provider) {
 	e.Emails = makeMap(entry, p.Fields.Emails)
 	e.Phones = makeMap(entry, p.Fields.Phones)
 	e.Others = makeMap(entry, p.Fields.Others)
+	e.Photo = base64.StdEncoding.EncodeToString(entry.GetRawAttributeValue("thumbnailPhoto"))
 }

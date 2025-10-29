@@ -36,6 +36,7 @@ type Fields struct {
 	Phones     []string `yaml:"phones"`
 	Emails     []string `yaml:"emails"`
 	Others     []string `yaml:"others"`
+	Photo      string   `yaml:"photo"`
 }
 
 func (c *Config) setDefaultsOnEmpty() {

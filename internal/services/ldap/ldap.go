@@ -15,6 +15,9 @@ import (
 
 func getAttrFields(p config.Provider) []string {
 	fields := []string{"objectClass", p.Fields.Identifier, p.Fields.FullName}
+	if p.Fields.Photo != "" {
+		fields = append(fields, p.Fields.Photo)
+	}
 	fields = append(fields, p.Fields.Phones...)
 	fields = append(fields, p.Fields.Emails...)
 

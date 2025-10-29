@@ -3,6 +3,7 @@ package controllers
 import (
 	"context"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -71,6 +72,14 @@ func GetPhoto(cfg *config.Config) http.HandlerFunc {
 
 			return
 		}
+
+		if entry.Photo != "" {
+			bs, _ := base64.StdEncoding.DecodeString(entry.Photo)
+			_, _ = w.Write(bs)
+
+			return
+		}
+
 		if cfg.EnableGravatar && entry.Emails["mail"] != "" {
 			hash := sha256.Sum256([]byte(strings.TrimSpace(entry.Emails["mail"])))
 			w.Header().Set("Location", "https://www.gravatar.com/avatar/"+hex.EncodeToString(hash[:]))
@@ -78,6 +87,7 @@ func GetPhoto(cfg *config.Config) http.HandlerFunc {
 
 			return
 		}
+
 		photoBuf, err := loadFromURL(cfg.PhotosURL+entry.ID+".jpg", r.Context())
 		if err != nil {
 			if errors.Is(err, ErrNonOKHTTPStatus) {
