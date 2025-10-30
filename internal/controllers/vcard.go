@@ -50,10 +50,8 @@ func GetCard(cfg *config.Config) http.HandlerFunc {
 		switch http.DetectContentType(bs[0:512]) {
 		case "image/png":
 			imgType = "PNG"
-		case "image/gif":
-			imgType = "GIF"
-		case "image/webp":
-			imgType = "WEBP"
+		case "image/bmp":
+			imgType = "BMP"
 		}
 
 		created := time.Now().In(time.UTC).Format(time.RFC3339)
