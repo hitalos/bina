@@ -1,4 +1,5 @@
 import { json, select } from 'd3'
+import i18n from './i18n.mjs'
 
 const results = select('#results')
 
@@ -45,7 +46,7 @@ const cardTemplate = ({ id, fullName, emails, others, phones }) => {
 					${title ? `<dt>Vínculo:</dt><dd>${title}</dd>` : ''}
 					${email ? `<dt>Email:</dt><dd>${email}</dd>` : ''}
 					${eID ? `<dt>Matrícula:</dt><dd>${eID}</dd>` : ''}
-					${Object.keys(phones).map((k) => `<dt>${k}:</dt><dd>${phones[k]}</dd>`).join('')}
+					${Object.keys(phones).map((k) => `<dt>${i18n['pt-BR'][k]}:</dt><dd>${phones[k]}</dd>`).join('')}
 				</dl>
 			</main>
 			<footer>${id ? `<a href="/contacts/vcard/${id}">Baixar Vcard</a>` : ''}</footer>
