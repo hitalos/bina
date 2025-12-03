@@ -40,6 +40,7 @@ func setRoutes(app *chi.Mux, cfg *config.Config) {
 	app.Route("/contacts", func(contacts chi.Router) {
 		contacts.Get("/all.json", controllers.GetContacts(cfg))
 		contacts.Get("/vcard/{contact:[A-Za-z0-9.]+}", controllers.GetCard(cfg))
+		contacts.Get("/qrcode/{contact:[A-Za-z0-9.]+}", controllers.GetQRCode(cfg))
 		contacts.Get(`/photo/{contact:[A-Za-z0-9.]+}`, controllers.GetPhoto(cfg))
 	})
 

@@ -3,6 +3,7 @@ module github.com/hitalos/bina
 go 1.25.5
 
 require (
+	github.com/boombuler/barcode v1.1.0
 	github.com/go-chi/chi/v5 v5.2.3
 	github.com/go-ldap/ldap/v3 v3.4.12
 	golang.org/x/text v0.31.0

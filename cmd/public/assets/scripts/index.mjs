@@ -49,8 +49,35 @@ const cardTemplate = ({ id, fullName, emails, others, phones }) => {
 					${Object.keys(phones).map((k) => `<dt>${i18n['pt-BR'][k]}:</dt><dd>${phones[k]}</dd>`).join('')}
 				</dl>
 			</main>
-			<footer>${id ? `<a href="/contacts/vcard/${id}">Baixar Vcard</a>` : ''}</footer>
+			<footer>
+				${id ? `<a href="/contacts/vcard/${id}">Baixar Vcard</a>` : ''}
+				${id ? `<a class="modal" data-url="/contacts/qrcode/${id}">Ver QRcode</a>` : ''}
+			</footer>
 		</div>`
+}
+
+const showQRcode = (url) => {
+	const modal = document.createElement('dialog')
+	modal.innerHTML = `
+		<div class="modal-content">
+			<span class="close-button">×</span>
+			<img src="${url}" alt="QR Code"/>
+		</div>`
+	document.body.appendChild(modal)
+	const closeButton = modal.querySelector('.close-button')
+
+	closeButton.addEventListener('click', () => {
+		modal.close()
+		document.body.removeChild(modal)
+	})
+	window.addEventListener('click', (ev) => {
+		if (ev.target === modal) {
+			modal.close()
+			document.body.removeChild(modal)
+		}
+	})
+
+	modal.showModal()
 }
 
 window.addEventListener('load', () => {
@@ -70,6 +97,11 @@ window.addEventListener('load', () => {
 					.classed('user', (d) => d.objectClass === 'user')
 					.html(cardTemplate)
 					.on('click', (ev) => {
+						if (ev.target.classList.contains('modal')) {
+							ev.preventDefault()
+							showQRcode(ev.target.dataset.url)
+							return
+						}
 						ev.currentTarget.classList.toggle('turned')
 					})
 

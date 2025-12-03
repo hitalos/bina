@@ -6,7 +6,7 @@ N;CHARSET=UTF-8:{{ .LastName }};{{ .FirstName }};;;
 NICKNAME;CHARSET=UTF-8:{{ .ID }}
 {{ if index .Emails "mail" }}EMAIL;CHARSET=UTF-8;type=HOME,INTERNET:{{ index .Emails "mail" }}{{ end }}
 LOGO;TYPE=PNG:%s
-{{ if .Photo }}PHOTO;ENCODING=b;TYPE={{ $.ImgType }}:{{ .Photo }}{{ end }}
+{{ if .Photo }}PHOTO;ENCODING=b;TYPE={{ $.ImgType }}:{{ .Photo }}{{ end -}}
 {{ if index .Phones "mobile" }}TEL;TYPE=CELL:{{ index .Phones "mobile" }}{{ end }}
 {{ if index .Phones "ipPhone" }}TEL;TYPE=WORK,VOICE:{{ index .Phones "ipPhone" }}{{ end }}
 {{- if index .Others "title" }}
@@ -14,7 +14,7 @@ TITLE;CHARSET=UTF-8:{{ index .Others "title" }}
 ROLE;CHARSET=UTF-8:{{ index .Others "title" }}
 {{- end }}
 {{ if index .Others "department" }}NOTE;CHARSET=UTF-8:{{ index .Others "department" }} - {{ index .Others "physicalDeliveryOfficeName" }}{{ end }}
-SOURCE;CHARSET=UTF-8:http://{{ $.Host }}/contacts/{{ .ID }}.vcf
+{{- if $.Host }}SOURCE;CHARSET=UTF-8:http://{{ $.Host }}/contacts/vcard/{{ .ID }}.vcf{{ end }}
 {{- end }}
-REV:{{ .Created }}
+{{- with .Created }}REV:{{ . }}{{ end }}
 END:VCARD

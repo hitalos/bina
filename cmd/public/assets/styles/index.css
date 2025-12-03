@@ -31,6 +31,30 @@
 			@apply outline-1 outline-white;
 		}
 	}
+
+	a.modal {
+		@apply cursor-pointer;
+	}
+
+	dialog[open] {
+		@apply m-auto;
+
+		.modal-content {
+			@apply m-auto;
+		}
+
+		.close-button {
+			@apply absolute cursor-pointer font-bold right-2 text-4xl top-0;
+		}
+
+		img {
+			@apply mt-8 m-4;
+		}
+
+		&::backdrop {
+			@apply bg-black opacity-50;
+		}
+	}
 }
 
 #results {
@@ -85,9 +109,13 @@
 			}
 		}
 
-		footer a {
-			@apply block font-bold;
-			color: var(--link-color);
+		footer {
+			@apply flex justify-around;
+
+			a {
+				@apply block font-bold;
+				color: var(--link-color);
+			}
 		}
 
 		.front {
