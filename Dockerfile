@@ -5,7 +5,7 @@ RUN npm ci && mkdir -p cmd/public/assets/scripts cmd/public/assets/styles
 COPY cmd/public/assets/ cmd/public/assets
 RUN NODE_ENV=production npm run build::js && npm run build::css
 
-FROM docker.io/library/golang:1.25.3-alpine as backend-builder
+FROM docker.io/library/golang:1.25.5-alpine as backend-builder
 WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download && mkdir -p cmd/public/assets/scripts cmd/public/assets/styles
