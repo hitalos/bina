@@ -1,18 +1,18 @@
 module github.com/hitalos/bina
 
-go 1.26.0
+go 1.26.4
 
 require (
 	github.com/boombuler/barcode v1.1.0
-	github.com/go-chi/chi/v5 v5.2.5
-	github.com/go-ldap/ldap/v3 v3.4.12
-	golang.org/x/text v0.34.0
+	github.com/go-chi/chi/v5 v5.3.0
+	github.com/go-ldap/ldap/v3 v3.4.13
+	golang.org/x/text v0.37.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
-	github.com/Azure/go-ntlmssp v0.1.0 // indirect
+	github.com/Azure/go-ntlmssp v0.1.1 // indirect
 	github.com/go-asn1-ber/asn1-ber v1.5.8-0.20250403174932-29230038a667 // indirect
 	github.com/google/uuid v1.6.0 // indirect
-	golang.org/x/crypto v0.48.0 // indirect
+	golang.org/x/crypto v0.52.0 // indirect
 )
