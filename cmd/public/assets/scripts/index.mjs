@@ -1,4 +1,5 @@
 import { json, select } from 'd3'
+import 'd3-transition'
 import i18n from './i18n.mjs'
 
 const results = select('#results')
