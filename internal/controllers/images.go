@@ -68,7 +68,7 @@ func GetPhoto(cfg *config.Config) http.HandlerFunc {
 		contact := chi.URLParam(r, "contact")
 		entry := models.Entry{}
 		if err := entry.GetByAccount(contact); err != nil {
-			slog.Error(err.Error())
+			slog.Error("error getting photo", "err", err.Error())
 
 			return
 		}

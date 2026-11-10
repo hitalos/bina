@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"net"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/go-ldap/ldap/v3"
@@ -26,15 +27,15 @@ func getAttrFields(p config.Provider) []string {
 
 // GetContacts searches contacts on LDAP server
 func GetContacts(p config.Provider) ([]*ldap.Entry, error) {
-	phoneFields := ""
+	phoneFields := new(strings.Builder)
 
 	for _, field := range p.Fields.Phones {
-		phoneFields += fmt.Sprintf("(%s=*)", field)
+		fmt.Fprintf(phoneFields, "(%s=*)", field)
 	}
 
 	filter := "(&" +
 		"(displayName=*)" +
-		"(|" + phoneFields + ")" +
+		"(|" + phoneFields.String() + ")" +
 		"(objectCategory=person)" +
 		"(!(UserAccountControl:1.2.840.113556.1.4.803:=2))" +
 		"(|(objectClass=user)(objectClass=contact)))"
@@ -88,7 +89,7 @@ func NewLdapConnection(p config.Provider) (*ldap.Conn, error) {
 
 	switch p.Params["schema"] {
 	case "ldaps":
-		tlsConf := &tls.Config{InsecureSkipVerify: p.IgnoreSSLVerification} //nolint:gosec // allow insecure skip verify
+		tlsConf := &tls.Config{InsecureSkipVerify: p.IgnoreSSLVerification} // #nosec G402
 		ldapConn, err = ldap.DialURL("ldaps://"+hostport, ldap.DialWithTLSConfig(tlsConf))
 	default:
 		ldapConn, err = ldap.DialURL(p.Params["schema"] + "://" + hostport)

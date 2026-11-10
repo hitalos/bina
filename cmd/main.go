@@ -62,6 +62,6 @@ func listen(app chi.Router, port int) {
 
 	slog.Info("Listening on", "port", port)
 	if err := s.ListenAndServe(); err != nil {
-		slog.Error(err.Error())
+		slog.Error("erro ao iniciar o servidor", "err", err.Error())
 	}
 }

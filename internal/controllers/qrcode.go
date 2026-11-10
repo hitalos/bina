@@ -30,13 +30,12 @@ func GetQRCode(cfg *config.Config) http.HandlerFunc {
 		contact := chi.URLParam(r, "contact")
 		entry := models.Entry{}
 		if err := entry.GetByAccount(contact); err != nil {
-			slog.Error(err.Error())
+			slog.Error("failed to get contact entry", "error", err)
 
 			return
 		}
 
 		entry.Photo = ""
-
 		data := struct {
 			Contact models.Entry
 			ImgType string
